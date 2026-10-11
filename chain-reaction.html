@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Chain Reaction</title>
+<meta name="description" content="Build cause-and-effect chains across APUSH Unit III, 1786 to 1824.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F3F4F1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#15171A" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the chain builds downward as an action and reaction chart. Each event box is joined to the next by a "so" box that says how one led to the other. The choices sit under the last link. */
+:root {
+  --bg: #F3F4F1; --fg: #17191C; --muted: #5A5E66; --rule: #D5D8D2; --panel: #FFFFFF; --panel2: #E9EBE6;
+  --ink: #1F5FBF; --ink-bg: #E3ECFA; --on-ink: #FFFFFF;
+  --good: #1D7443; --good-bg: #E2F1E8; --bad: #A1311F; --bad-bg: #F7E5E1; --warn: #8A5A00; --warn-bg: #FAEFD6;
+  --t-NAT: #2a78d6; --t-WXT: #eb6834; --t-GEO: #1baf7a; --t-MIG: #eda100; --t-PCE: #e87ba4; --t-WOR: #008300; --t-ARC: #6250d6; --t-SOC: #e34948;
+  --display: "Newsreader", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15171A; --fg: #ECEAE4; --muted: #A6A8AD; --rule: #343840; --panel: #1D2025; --panel2: #262A31;
+  --ink: #7FA9EE; --ink-bg: #1D2A40; --on-ink: #10151D;
+  --good: #6FCF97; --good-bg: #17301F; --bad: #E8806E; --bad-bg: #3A1F1A; --warn: #E0B44A; --warn-bg: #3A3015;
+  --t-NAT: #3987e5; --t-WXT: #d95926; --t-GEO: #199e70; --t-MIG: #c98500; --t-PCE: #d55181; --t-WOR: #008300; --t-ARC: #9085e9; --t-SOC: #e66767; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #15171A; --fg: #ECEAE4; --muted: #A6A8AD; --rule: #343840; --panel: #1D2025; --panel2: #262A31;
+  --ink: #7FA9EE; --ink-bg: #1D2A40; --on-ink: #10151D;
+  --good: #6FCF97; --good-bg: #17301F; --bad: #E8806E; --bad-bg: #3A1F1A; --warn: #E0B44A; --warn-bg: #3A3015;
+  --t-NAT: #3987e5; --t-WXT: #d95926; --t-GEO: #199e70; --t-MIG: #c98500; --t-PCE: #d55181; --t-WOR: #008300; --t-ARC: #9085e9; --t-SOC: #e66767; color-scheme: dark }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.5; margin: 0; }
+button, select, textarea, input { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+h1 { font-family: var(--display); font-weight: 600; font-size: clamp(28px, 5vw, 40px); line-height: 1.05; margin: 0 0 6px; text-wrap: balance; letter-spacing: -.01em; }
+h2 { font-family: var(--display); font-weight: 600; font-size: 24px; line-height: 1.15; margin: 0 0 6px; text-wrap: balance; }
+p { margin: 0 0 10px; }
+.eyebrow { font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.muted { color: var(--muted); }
+.mono { font-family: var(--mono); }
+.btn { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 16px; cursor: pointer; font-weight: 500; }
+.btn:hover:not(:disabled) { background: var(--panel2); }
+.btn:disabled { opacity: .45; cursor: default; }
+.btn.primary { background: var(--ink); border-color: var(--ink); color: var(--on-ink); }
+.btn.primary:hover:not(:disabled) { background: var(--ink); filter: brightness(1.08); }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: var(--panel); }
+.seg button { background: none; border: 0; border-right: 1px solid var(--rule); padding: 6px 12px; cursor: pointer; font-size: 14px; color: var(--muted); }
+.seg button:last-child { border-right: 0; }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.opt { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.opt > span { font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 50%; flex: none; }
+
+.wrap { max-width: 800px; margin: 0 auto; padding-block: 22px 72px; padding-inline: 18px; }
+.lede { font-size: 17px; max-width: 62ch; margin-bottom: 0; }
+.bar { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: flex-end; margin-top: 18px; }
+.bar select { padding: 7px 10px; border: 1px solid var(--rule); border-radius: 6px; background: var(--panel); max-width: 100%; min-width: 0; }
+.bar .opt { min-width: 0; max-width: 100%; }
+.q { margin-top: 20px; }
+.q h2 { font-size: clamp(22px, 4vw, 28px); }
+.q .ask { font-size: 17px; margin: 0; max-width: 62ch; }
+.meta { font-size: 13.5px; color: var(--muted); margin-top: 6px; }
+
+.chain { list-style: none; margin: 18px 0 0; padding: 0; display: flex; flex-direction: column; align-items: stretch; }
+.link { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 15px; }
+.link .yr { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+.link .ev { font-family: var(--display); font-size: 19px; line-height: 1.3; margin: 2px 0 0; }
+.link.first { border-style: dashed; }
+.link.miss { border-color: var(--bad); } .link.clean { border-color: var(--good); }
+.so { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 10px; align-items: center; padding: 4px 0 4px 14px; }
+.so .arrow { display: flex; flex-direction: column; align-items: center; color: var(--ink); font-family: var(--mono); font-size: 11.5px; font-weight: 500; letter-spacing: .08em; }
+.so .arrow::before, .so .arrow::after { content: ""; width: 2px; height: 14px; background: var(--ink); display: block; }
+.so .arrow::after { height: 14px; margin-top: 2px; }
+.so .arrow::before { margin-bottom: 2px; }
+.so p { margin: 6px 0; font-size: 15.5px; color: var(--fg); max-width: 60ch; }
+.so.wait p { color: var(--muted); font-style: italic; }
+
+.pick { margin-top: 6px; padding: 14px 16px 16px; background: var(--ink-bg); border: 1.5px solid var(--ink); border-radius: 10px; }
+.pick .lab { font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: var(--ink); margin-bottom: 8px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; }
+.pick .lab button { font-size: 12.5px; letter-spacing: 0; text-transform: none; padding: 3px 10px; }
+.opts { display: flex; flex-direction: column; gap: 7px; }
+.opts button { text-align: left; background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 10px 13px; cursor: pointer; font-family: var(--display); font-size: 17.5px; line-height: 1.3; }
+.opts button:hover:not(:disabled) { border-color: var(--ink); }
+.opts button:disabled { opacity: .5; cursor: default; text-decoration: line-through; text-decoration-color: var(--bad); }
+.say { font-size: 14px; color: var(--bad); margin: 8px 0 0; min-height: 21px; }
+.done { margin-top: 16px; padding: 16px 18px; background: var(--good-bg); border: 1.5px solid var(--good); border-radius: 10px; }
+.done .big { font-family: var(--display); font-size: 24px; font-weight: 600; line-height: 1.15; }
+.done .acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.tally { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+@media (max-width: 520px) { .so { grid-template-columns: 34px minmax(0, 1fr); padding-left: 6px; } }
+@media (prefers-reduced-motion: no-preference) { .link.new { animation: in .25s ease-out; } @keyframes in { from { transform: translateY(-6px); opacity: .4; } to { transform: none; opacity: 1; } } }
+:root { color-scheme: light; }
+[hidden] { display: none !important; }
+.top { font-size: 13px; margin-bottom: 10px; } .top a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--rule); } .top a:hover { color: var(--ink); border-color: var(--ink); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <nav class="top"><a href="./">All Unit III review games</a></nav>
+    <div class="eyebrow">APUSH · Unit III · 1786 to 1824</div>
+    <h1>Chain Reaction</h1>
+    <p class="lede">Every event in a chain helped cause the next one. Start from the first link and build the rest in order.</p>
+  </header>
+
+  <div class="bar">
+    <div class="opt"><span>Chain</span><select id="pick" aria-label="Choose a chain"></select></div>
+    <div class="opt"><span>&nbsp;</span><button class="btn" id="rand">Random chain</button></div>
+    <div class="opt"><span>&nbsp;</span><span class="tally" id="tally"></span></div>
+  </div>
+
+  <section class="q" id="q"></section>
+  <ol class="chain" id="chain" aria-live="polite"></ol>
+  <div id="pickbox"></div>
+</div>
+
+<script type="application/json" id="data">[{"id":"constitution","title":"From Shays’ Rebellion to the Bill of Rights","q":"How did a farmers’ revolt in Massachusetts lead to ten amendments?","links":[{"e":"Shays’ Rebellion closes courts in Massachusetts, and the Confederation Congress cannot raise an army to respond.","y":"1786 to 1787","so":"The revolt convinces leaders such as Washington and Madison that the Articles of Confederation are too weak to keep order."},{"e":"Delegates meet in Philadelphia to revise the Articles.","y":"May 1787","so":"Once in the room, they decide a revision cannot fix the problem and begin designing a new government."},{"e":"The Great Compromise ends the deadlock between large and small states.","y":"July 1787","so":"With representation settled, the delegates can finish and sign a Constitution that greatly strengthens the central government."},{"e":"Anti-Federalists attack the finished Constitution for having no bill of rights.","y":"Fall 1787 to 1788","so":"To win over doubtful states, Federalists promise to add a bill of rights as soon as the new government meets."},{"e":"The ninth state ratifies the Constitution.","y":"June 1788","so":"The first Congress keeps the promise: Madison drafts amendments and sends them to the states."},{"e":"The Bill of Rights is ratified.","y":"December 1791","so":""}]},{"id":"parties","title":"From Hamilton’s plan to the Whiskey Rebellion","q":"How did paying off the war debt end with an army marching into Pennsylvania?","links":[{"e":"Hamilton proposes that the federal government take over the states’ war debts.","y":"January 1790","so":"Virginia and other states that have already paid most of what they owe object, and the plan stalls in Congress."},{"e":"Jefferson, Madison, and Hamilton strike a bargain: assumption passes, and the capital goes to the Potomac.","y":"Summer 1790","so":"The states’ debts are now federal debts, and someone has to pay the interest on them."},{"e":"Hamilton reports that the tariff alone cannot cover the interest and asks for a tax on something made at home.","y":"December 1790","so":"Congress agrees and chooses distilled spirits."},{"e":"Congress passes the excise tax on whiskey.","y":"March 1791","so":"The tax falls hardest on backcountry farmers who turn their grain into whiskey, and they refuse to pay."},{"e":"Farmers in western Pennsylvania attack tax collectors.","y":"July 1794","so":"Washington decides the government must show it can enforce its own laws."},{"e":"About 13,000 militia march west, and the rebellion collapses without a battle.","y":"Fall 1794","so":""}]},{"id":"neutrality","title":"From the French Revolution to the Farewell Address","q":"How did a war in Europe shape the advice Washington left behind?","links":[{"e":"Revolutionary France goes to war with Britain.","y":"February 1793","so":"France expects American help under the 1778 alliance, and Washington must decide whether to give it."},{"e":"Washington issues the Neutrality Proclamation.","y":"April 1793","so":"Britain does not respect that neutrality. Its navy seizes American ships trading with the French West Indies."},{"e":"The seizures and the British forts in the Northwest bring the two countries close to war.","y":"Early 1794","so":"To avoid a war the country cannot afford, Washington sends John Jay to London."},{"e":"Jay’s Treaty keeps the peace with Britain.","y":"Signed November 1794","so":"Spain fears that Britain and the United States are drawing together against it and decides to settle its own disputes."},{"e":"In Pinckney’s Treaty, Spain opens the Mississippi River and New Orleans to American trade.","y":"October 1795","so":"Jay’s Treaty, meanwhile, has set off a bitter party fight, and it convinces Washington that attachments to foreign nations are dividing Americans."},{"e":"Washington’s Farewell Address warns against permanent alliances and against parties.","y":"September 1796","so":""}]},{"id":"adams","title":"From Jay’s Treaty to the Revolution of 1800","q":"How did a treaty with Britain help end Federalist rule?","links":[{"e":"The Senate approves Jay’s Treaty, keeping the peace with Britain.","y":"June 1795","so":"France reads the treaty as an American tilt toward its enemy and begins seizing American ships."},{"e":"French agents demand a bribe from American envoys in the XYZ Affair.","y":"Fall 1797","so":"When the demand becomes public in the spring of 1798, Americans are outraged and Congress prepares for war."},{"e":"Congress builds up the navy, and American ships begin fighting France at sea: the Quasi-War.","y":"Spring 1798","so":"With war fever high, Federalists move against the immigrants and editors who support the opposition."},{"e":"Congress passes the Alien and Sedition Acts.","y":"June and July 1798","so":"Jefferson and Madison answer that the states can judge a federal law unconstitutional."},{"e":"Kentucky and Virginia adopt their Resolutions against the acts.","y":"Late 1798","so":"Anger at the acts and at the war taxes becomes the Democratic-Republican case in the next election."},{"e":"Jefferson defeats Adams in the election of 1800.","y":"1800","so":""}]},{"id":"marbury","title":"From the election of 1800 to judicial review","q":"How did a lost election give the Supreme Court its greatest power?","links":[{"e":"Federalists lose the presidency and Congress in the election of 1800.","y":"Late 1800","so":"They still control the government until March 1801 and decide to entrench themselves in the courts."},{"e":"In their last weeks, Federalists create new judgeships and other court posts, and Adams fills them.","y":"February to March 1801","so":"A few commissions, including William Marbury’s as a justice of the peace, are not delivered before Jefferson takes office."},{"e":"Jefferson orders the undelivered commissions held back, and his secretary of state, James Madison, does not deliver Marbury’s.","y":"Spring 1801","so":"Marbury turns to the courts to force Madison’s hand."},{"e":"Marbury sues in the Supreme Court, using a 1789 law that lets him start his case there.","y":"December 1801","so":"Chief Justice Marshall must decide whether the Court can give orders to the president’s administration, and whether that 1789 law is valid."},{"e":"Marshall rules that Marbury deserves his commission but that the 1789 law is unconstitutional. The Court has claimed the power of judicial review.","y":"February 1803","so":""}]},{"id":"louisiana","title":"From Napoleon’s empire to Lewis and Clark","q":"How did a slave revolt in the Caribbean double the size of the United States?","links":[{"e":"Napoleon takes Louisiana back from Spain, planning a new French empire in America.","y":"1800","so":"A strong France on the Mississippi worries Americans far more than weak Spain did, because western farmers ship everything through New Orleans."},{"e":"Spanish officials, still running the colony, end the American right to store goods at New Orleans.","y":"October 1802","so":"The West is alarmed, and Jefferson decides he must try to buy the city."},{"e":"Jefferson sends James Monroe to Paris to help buy New Orleans.","y":"January 1803","so":"By the time Monroe reaches Paris, Napoleon has given up on his American empire. Haitian resistance and yellow fever have destroyed the army he sent to retake Saint-Domingue, and war with Britain is coming."},{"e":"Napoleon offers all of Louisiana, and the American envoys agree to buy it for $15 million.","y":"April 1803","so":"The Constitution does not mention buying land, so Jefferson has to set aside his strict reading to accept."},{"e":"The Senate ratifies the Louisiana Purchase.","y":"October 1803","so":"The expedition to the Pacific that Jefferson had already planned will now cross land the United States owns."},{"e":"Lewis and Clark set out up the Missouri River.","y":"May 1804","so":""}]},{"id":"war","title":"From impressment to the War of 1812","q":"Why did a country that wanted only to trade end up at war?","links":[{"e":"Britain and France, at war with each other, both seize American ships, and Britain impresses American sailors.","y":"1803 to 1807","so":"The insults pile up until a British warship fires on a ship of the U.S. Navy."},{"e":"The Leopard attacks the Chesapeake off the coast of Virginia.","y":"June 1807","so":"Americans demand war. Jefferson tries economic pressure in its place."},{"e":"The Embargo Act bans American exports.","y":"December 1807","so":"The embargo wrecks American commerce and changes nothing in Europe, so Congress replaces it with weaker laws."},{"e":"The Non-Intercourse Act and Macon’s Bill No. 2 try to bargain with Britain and France.","y":"1809 to 1810","so":"Napoleon’s false promise leads Madison to cut off Britain alone, while in the West settlers blame Britain for Tecumseh’s resistance."},{"e":"Harrison fights the Prophet’s warriors at Tippecanoe, and War Hawks take over Congress.","y":"November 1811","so":"With peaceful pressure exhausted and the West demanding action, Madison asks for war."},{"e":"Congress declares war on Britain.","y":"June 1812","so":""}]},{"id":"federalists","title":"From the British blockade to the end of the Federalists","q":"How did winning nothing in a war destroy the party that opposed it?","links":[{"e":"The British blockade and the war strangle New England’s shipping.","y":"1813 to 1814","so":"New England Federalists, who never wanted the war, decide to act together."},{"e":"Federalist delegates open the Hartford Convention to draw up their demands.","y":"December 15, 1814","so":"While they meet, American and British negotiators in Europe are finishing a peace."},{"e":"The Treaty of Ghent is signed, ending the war.","y":"December 24, 1814","so":"News travels slowly, and before it arrives a British army attacks New Orleans."},{"e":"Andrew Jackson wins the Battle of New Orleans.","y":"January 8, 1815","so":"Hartford’s demands reach Washington at the same moment as news of victory and peace."},{"e":"The Federalists look disloyal and are mocked across the country.","y":"February 1815","so":"The party never recovers as a national force."},{"e":"James Monroe wins the presidency against the last Federalist candidate.","y":"1816","so":""}]},{"id":"panic","title":"From the War of 1812 to the Panic of 1819","q":"How did the war lead to a bank, a boom, and a crash?","links":[{"e":"The War of 1812 exposes weaknesses: no national bank, poor roads, and dependence on British goods.","y":"1812 to 1815","so":"After the war, even Democratic-Republicans who once opposed Hamilton want national solutions."},{"e":"Congress charters the Second Bank of the United States and passes the protective Tariff of 1816.","y":"April 1816","so":"The new Bank and the state banks lend freely."},{"e":"Easy credit feeds a rush to buy western land.","y":"1817 to 1818","so":"The boom depends on high prices for cotton and grain in Europe."},{"e":"European demand falls, crop prices drop, and the Second Bank calls in its loans.","y":"Late 1818","so":"State banks cannot pay, and they fail."},{"e":"The Panic of 1819: banks close, farms are foreclosed, and workers lose their jobs.","y":"1819","so":"People who lost land and savings look for someone to blame."},{"e":"Westerners turn against the Second Bank.","y":"1820s","so":""}]},{"id":"missouri","title":"From the cotton gin to the Missouri Compromise","q":"How did a machine for cleaning cotton lead to a line across the map?","links":[{"e":"Eli Whitney invents the cotton gin.","y":"1793","so":"Cotton becomes hugely profitable, and so does the labor of enslaved people."},{"e":"Cotton planting and slavery begin spreading west from Georgia and South Carolina.","y":"Late 1790s","so":"Slaveholders now have a strong reason to carry slavery into any new land the country gains."},{"e":"The Louisiana Purchase adds a vast territory west of the Mississippi.","y":"1803","so":"Settlers, some of them slaveholders, move into the Missouri country until it has enough people to ask for statehood."},{"e":"Missouri asks to join the Union as a slave state.","y":"1818","so":"Admitting it would carry slavery farther north and west, and a New York congressman moves to stop that."},{"e":"The Tallmadge Amendment proposes ending slavery in Missouri gradually.","y":"February 1819","so":"The House passes it, the Senate rejects it, and Congress deadlocks until Maine also asks for statehood."},{"e":"The Missouri Compromise admits Missouri and Maine and bans slavery in the rest of the Louisiana Purchase north of 36°30′.","y":"March 1820","so":""}]},{"id":"monroe","title":"From Jackson in Florida to the Monroe Doctrine","q":"How did a raid across the Florida border end with a warning to all of Europe?","links":[{"e":"Andrew Jackson invades Spanish Florida.","y":"1818","so":"The invasion shows Spain that it cannot defend Florida, and John Quincy Adams presses the point."},{"e":"Spain gives up Florida in the Adams-Onís Treaty.","y":"February 1819","so":"Spain is weak everywhere: its colonies across Latin America are winning their independence."},{"e":"The United States recognizes the new Latin American republics.","y":"1822","so":"European monarchies talk of helping Spain take the colonies back, and Russia claims more of the Pacific coast."},{"e":"Britain proposes a joint warning to Europe.","y":"August 1823","so":"John Quincy Adams argues the United States should speak for itself."},{"e":"President Monroe announces the Monroe Doctrine.","y":"December 1823","so":""}]}]</script>
+<script src="config.js"></script>
+<script src="progress.js"></script>
+<script>
+(function () {
+  'use strict';
+  var PR = window.Progress || null;
+  var CH = JSON.parse(document.getElementById('data').textContent);
+  var S = { c: 0, at: 1, order: [], tried: {}, missed: {}, hint: false, hinted: {}, say: '', solved: {} };
+  if (PR) PR.update(function (p) { p.cr.total = CH.length; });
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function ls(k, v) { try { if (v === undefined) return localStorage.getItem('apush3.' + k); localStorage.setItem('apush3.' + k, v); } catch (e) { return null; } }
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function cur() { return CH[S.c]; }
+
+  function load(i) {
+    S.c = (i + CH.length) % CH.length; S.at = 1; S.tried = {}; S.missed = {}; S.hinted = {}; S.hint = false; S.say = '';
+    var idx = []; for (var k = 1; k < cur().links.length; k++) idx.push(k);
+    S.order = shuffle(idx);
+    $('pick').value = String(S.c); ls('cr.chain', String(S.c));
+    render();
+  }
+  function render() {
+    var c = cur(), L = c.links, n = L.length, done = S.at >= n;
+    $('q').innerHTML = '<h2>' + esc(c.title) + '</h2><p class="ask">' + esc(c.q) + '</p><p class="meta">' + n + ' links. The first one is placed for you.</p>';
+    var h = '';
+    for (var i = 0; i < S.at; i++) {
+      var cls = i === 0 ? 'first' : (S.missed[i] || S.hinted[i] ? 'miss' : 'clean');
+      h += '<li class="link ' + cls + (i === S.at - 1 && i > 0 ? ' new' : '') + '"><div class="yr">' + esc(L[i].y) + '</div><p class="ev">' + esc(L[i].e) + '</p></li>';
+      if (i < S.at - 1) h += '<li class="so"><span class="arrow">SO</span><p>' + esc(L[i].so) + '</p></li>';
+      else if (!done) h += '<li class="so wait"><span class="arrow">SO</span><p>' + (S.hint ? '<span style="font-style:normal;color:var(--fg)">' + esc(L[i].so) + '</span>' : 'What did this lead to?') + '</p></li>';
+    }
+    $('chain').innerHTML = h;
+    var box = $('pickbox');
+    if (!done) {
+      var o = '<div class="pick"><div class="lab"><span>Pick the next link · ' + (S.at) + ' of ' + (n - 1) + '</span><button class="btn" id="hint"' + (S.hint ? ' disabled' : '') + '>Show the connection</button></div><div class="opts">';
+      S.order.forEach(function (k) {
+        if (k < S.at) return;
+        o += '<button data-k="' + k + '"' + (S.tried[k] ? ' disabled' : '') + '>' + esc(L[k].e) + '</button>';
+      });
+      box.innerHTML = o + '</div><p class="say" role="status">' + esc(S.say) + '</p></div>';
+    } else {
+      var clean = 0; for (var j = 1; j < n; j++) if (!S.missed[j] && !S.hinted[j]) clean++;
+      S.solved[c.id] = true; ls('cr.solved', Object.keys(S.solved).join(','));
+      box.innerHTML = '<div class="done"><div class="big">Chain complete. ' + clean + ' of ' + (n - 1) + ' links on the first try.</div>' +
+        '<p style="margin:8px 0 0;max-width:60ch">Now answer the question at the top in one sentence, out loud or on paper. Use the word <b>because</b> at least once.</p>' +
+        '<div class="acts"><button class="btn primary" id="nextc">Next chain</button><button class="btn" id="redo">Build this one again</button></div></div>';
+    }
+    var s = Object.keys(S.solved).length; $('tally').textContent = s ? s + ' of ' + CH.length + ' chains built' : '';
+  }
+  function recordDone() {
+    if (!PR) return;
+    var c = cur(), n = c.links.length, clean = 0, hints = 0;
+    for (var j = 1; j < n; j++) { if (!S.missed[j] && !S.hinted[j]) clean++; if (S.hinted[j]) hints++; }
+    PR.update(function (p) { var r = p.cr.chains[c.id] || (p.cr.chains[c.id] = { plays: 0, best: -1 }); r.plays++; r.last = clean; r.total = n - 1; if (clean > r.best) r.best = clean; r.at = new Date().toISOString(); });
+    PR.event('cr', 'chain_complete', { score: clean, total: n - 1, detail: { chain: c.id, hints: hints } });
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('button') : null; if (!b) return;
+    if (b.dataset.k !== undefined) {
+      var k = parseInt(b.dataset.k, 10);
+      if (k === S.at) { S.at++; S.tried = {}; S.hint = false; S.say = ''; if (S.at >= cur().links.length) recordDone(); }
+      else { S.tried[k] = true; S.missed[S.at] = true; S.say = 'That comes later in the chain. Ask what the last link made possible first.'; }
+      render();
+      if (S.at >= cur().links.length) { try { $('pickbox').scrollIntoView({ block: 'nearest' }); } catch (e2) {} }
+      return;
+    }
+    if (b.id === 'hint') { S.hint = true; S.hinted[S.at] = true; render(); return; }
+    if (b.id === 'rand') { var n = S.c; while (CH.length > 1 && n === S.c) n = Math.floor(Math.random() * CH.length); load(n); return; }
+    if (b.id === 'nextc') { load(S.c + 1); try { window.scrollTo(0, Math.max(0, $('q').getBoundingClientRect().top + window.pageYOffset - 20)); } catch (e3) {} return; }
+    if (b.id === 'redo') { load(S.c); return; }
+  });
+  $('pick').addEventListener('change', function () { load(parseInt(this.value, 10) || 0); });
+  $('pick').innerHTML = CH.map(function (c, i) { return '<option value="' + i + '">' + esc(c.title) + '</option>'; }).join('');
+  (ls('cr.solved') || '').split(',').forEach(function (id) { if (id && CH.some(function (c) { return c.id === id; })) S.solved[id] = true; });
+  var c0 = parseInt(ls('cr.chain') || '0', 10); load(c0 >= 0 && c0 < CH.length ? c0 : 0);
+})();
+</script>
+
+</body>
+</html>

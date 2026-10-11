@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>New Republic Timeline Game</title>
+<meta name="description" content="Place events from 1786 to 1824 in order, one card at a time. APUSH Unit III review.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F3F4F1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#15171A" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the card to place sits on top; the timeline grows downward beneath it, earliest at the top. One column, so it projects and fits a phone. */
+:root {
+  --bg: #F3F4F1; --fg: #17191C; --muted: #5A5E66; --rule: #D5D8D2; --panel: #FFFFFF; --panel2: #E9EBE6;
+  --ink: #1F5FBF; --ink-bg: #E3ECFA; --on-ink: #FFFFFF;
+  --good: #1D7443; --good-bg: #E2F1E8; --bad: #A1311F; --bad-bg: #F7E5E1; --warn: #8A5A00; --warn-bg: #FAEFD6;
+  --t-NAT: #2a78d6; --t-WXT: #eb6834; --t-GEO: #1baf7a; --t-MIG: #eda100; --t-PCE: #e87ba4; --t-WOR: #008300; --t-ARC: #6250d6; --t-SOC: #e34948;
+  --display: "Newsreader", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15171A; --fg: #ECEAE4; --muted: #A6A8AD; --rule: #343840; --panel: #1D2025; --panel2: #262A31;
+  --ink: #7FA9EE; --ink-bg: #1D2A40; --on-ink: #10151D;
+  --good: #6FCF97; --good-bg: #17301F; --bad: #E8806E; --bad-bg: #3A1F1A; --warn: #E0B44A; --warn-bg: #3A3015;
+  --t-NAT: #3987e5; --t-WXT: #d95926; --t-GEO: #199e70; --t-MIG: #c98500; --t-PCE: #d55181; --t-WOR: #008300; --t-ARC: #9085e9; --t-SOC: #e66767; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #15171A; --fg: #ECEAE4; --muted: #A6A8AD; --rule: #343840; --panel: #1D2025; --panel2: #262A31;
+  --ink: #7FA9EE; --ink-bg: #1D2A40; --on-ink: #10151D;
+  --good: #6FCF97; --good-bg: #17301F; --bad: #E8806E; --bad-bg: #3A1F1A; --warn: #E0B44A; --warn-bg: #3A3015;
+  --t-NAT: #3987e5; --t-WXT: #d95926; --t-GEO: #199e70; --t-MIG: #c98500; --t-PCE: #d55181; --t-WOR: #008300; --t-ARC: #9085e9; --t-SOC: #e66767; color-scheme: dark }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.5; margin: 0; }
+button, select, textarea, input { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+h1 { font-family: var(--display); font-weight: 600; font-size: clamp(28px, 5vw, 40px); line-height: 1.05; margin: 0 0 6px; text-wrap: balance; letter-spacing: -.01em; }
+h2 { font-family: var(--display); font-weight: 600; font-size: 24px; line-height: 1.15; margin: 0 0 6px; text-wrap: balance; }
+p { margin: 0 0 10px; }
+.eyebrow { font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.muted { color: var(--muted); }
+.mono { font-family: var(--mono); }
+.btn { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 16px; cursor: pointer; font-weight: 500; }
+.btn:hover:not(:disabled) { background: var(--panel2); }
+.btn:disabled { opacity: .45; cursor: default; }
+.btn.primary { background: var(--ink); border-color: var(--ink); color: var(--on-ink); }
+.btn.primary:hover:not(:disabled) { background: var(--ink); filter: brightness(1.08); }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: var(--panel); }
+.seg button { background: none; border: 0; border-right: 1px solid var(--rule); padding: 6px 12px; cursor: pointer; font-size: 14px; color: var(--muted); }
+.seg button:last-child { border-right: 0; }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.opt { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.opt > span { font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 50%; flex: none; }
+
+.wrap { max-width: 820px; margin: 0 auto; padding-block: 22px 72px; padding-inline: 18px; }
+.lede { font-size: 17px; max-width: 62ch; margin-bottom: 0; }
+.setup { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: flex-end; margin-top: 18px; padding: 14px 16px; background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; }
+.setup .go { margin-left: auto; }
+.how { margin: 14px 0 0; padding: 0 0 0 20px; max-width: 64ch; color: var(--muted); font-size: 15px; }
+.how li { margin-bottom: 3px; }
+
+.hud { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; margin-top: 22px; font-size: 14px; }
+.teams { display: flex; flex-wrap: wrap; gap: 6px; }
+.team { font-family: var(--mono); font-size: 12.5px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--rule); background: var(--panel); font-variant-numeric: tabular-nums; }
+.team[aria-current="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.dots { display: flex; gap: 5px; align-items: center; }
+.dots i { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--muted); display: block; }
+.dots i.ok { background: var(--good); border-color: var(--good); }
+.dots i.no { background: var(--bad); border-color: var(--bad); }
+.dots i.now { border-color: var(--ink); box-shadow: 0 0 0 2px var(--ink-bg); }
+
+.hand { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 4; margin-top: 10px; padding: 16px 18px; background: var(--ink-bg); border: 1.5px solid var(--ink); border-radius: 10px; }
+.hand .lab { font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.hand .ttl { font-family: var(--display); font-size: clamp(22px, 4vw, 28px); font-weight: 600; line-height: 1.15; margin: 0 0 4px; text-wrap: balance; }
+.hand .clue { margin: 0; max-width: 64ch; }
+.hand.res-ok { background: var(--good-bg); border-color: var(--good); } .hand.res-ok .lab { color: var(--good); }
+.hand.res-no { background: var(--bad-bg); border-color: var(--bad); } .hand.res-no .lab { color: var(--bad); }
+.hand .date { font-family: var(--mono); font-size: 13.5px; margin: 2px 0 6px; }
+.hand .acts { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+.line { list-style: none; margin: 18px 0 0; padding: 0; position: relative; }
+.line::before { content: ""; position: absolute; left: 39px; top: 6px; bottom: 6px; width: 2px; background: var(--rule); }
+.ev { display: grid; grid-template-columns: 80px minmax(0, 1fr); gap: 0 14px; align-items: start; padding: 7px 0; position: relative; }
+.ev .yr { font-family: var(--mono); font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums; background: var(--bg); text-align: center; padding: 3px 0; position: relative; z-index: 1; border-radius: 4px; }
+.ev .box { background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 9px 13px; min-width: 0; }
+.ev .nm { font-family: var(--display); font-size: 18.5px; font-weight: 600; line-height: 1.2; }
+.ev .dt { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 1px; }
+.ev .wy { font-size: 14.5px; margin: 5px 0 0; max-width: 66ch; }
+.ev.anchor .box { border-style: dashed; }
+.ev.ok .box { border-color: var(--good); } .ev.no .box { border-color: var(--bad); }
+.ev .mark { font-family: var(--mono); font-size: 11px; letter-spacing: .05em; font-weight: 500; }
+.ev.ok .mark { color: var(--good); } .ev.no .mark { color: var(--bad); } .ev.anchor .mark { color: var(--muted); }
+.ev.fresh .box { box-shadow: 0 0 0 3px var(--ink-bg); }
+.slot { padding: 2px 0 2px 94px; position: relative; }
+.slot button { width: 100%; text-align: left; background: none; border: 1.5px dashed var(--ink); color: var(--ink); border-radius: 8px; padding: 8px 13px; cursor: pointer; font-weight: 500; font-size: 14.5px; }
+.slot button:hover, .slot button:focus-visible { background: var(--ink-bg); }
+
+.end { margin-top: 22px; padding: 18px; background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; }
+.end .big { font-family: var(--display); font-size: 34px; font-weight: 600; line-height: 1.1; }
+.end .acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.big-text { font-size: 19px; }
+.big-text .ev .nm { font-size: 22px; } .big-text .ev .wy, .big-text .slot button { font-size: 17px; }
+@media (max-width: 560px) {
+  .ev { grid-template-columns: 56px minmax(0, 1fr); gap: 0 10px; }
+  .ev .yr { font-size: 14.5px; }
+  .line::before { left: 27px; }
+  .slot { padding-left: 66px; }
+  .setup .go { margin-left: 0; width: 100%; }
+  .setup .go .btn { width: 100%; }
+}
+@media (prefers-reduced-motion: no-preference) { .ev.fresh .box { animation: drop .28s ease-out; } @keyframes drop { from { transform: translateY(-8px); opacity: .5; } to { transform: none; opacity: 1; } } }
+:root { color-scheme: light; }
+[hidden] { display: none !important; }
+.top { font-size: 13px; margin-bottom: 10px; } .top a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--rule); } .top a:hover { color: var(--ink); border-color: var(--ink); }
+</style>
+</head>
+<body>
+
+<div class="wrap" id="root">
+  <header>
+    <nav class="top"><a href="./">All Unit III review games</a></nav>
+    <div class="eyebrow">APUSH · Unit III · 1786 to 1824</div>
+    <h1>New Republic Timeline Game</h1>
+    <p class="lede">You get one event at a time. Decide where it belongs among the events already on the line.</p>
+  </header>
+
+  <section class="setup" aria-label="Game settings">
+    <div class="opt"><span>Years</span><div class="seg" id="o-scope">
+      <button data-v="all" aria-pressed="true">Whole unit</button><button data-v="a" aria-pressed="false">1786 to 1800</button><button data-v="b" aria-pressed="false">1800 to 1824</button></div></div>
+    <div class="opt"><span>Cards</span><div class="seg" id="o-len">
+      <button data-v="6" aria-pressed="false">6</button><button data-v="8" aria-pressed="true">8</button><button data-v="12" aria-pressed="false">12</button></div></div>
+    <div class="opt"><span>Level</span><div class="seg" id="o-level">
+      <button data-v="std" aria-pressed="true">Years</button><button data-v="hard" aria-pressed="false">Months too</button></div></div>
+    <div class="opt"><span>Players</span><select id="o-teams" aria-label="Number of players or pods">
+      <option value="1">Solo</option><option value="2">2 pods</option><option value="3">3 pods</option><option value="4">4 pods</option><option value="5">5 pods</option><option value="6">6 pods</option><option value="7">7 pods</option><option value="8">8 pods</option></select></div>
+    <div class="opt"><span>Text</span><div class="seg" id="o-big">
+      <button data-v="0" aria-pressed="true">Regular</button><button data-v="1" aria-pressed="false">Large</button></div></div>
+    <div class="go"><button class="btn primary" id="start">Start a new game</button></div>
+  </section>
+  <ol class="how" id="how">
+    <li>Read the event and the clue. No date is shown.</li>
+    <li>Choose the gap on the timeline where it belongs.</li>
+    <li>Right or wrong, the card lands in its true place with its date, and you see why it matters.</li>
+    <li>On the "Months too" level, two cards can share a year, so the month decides.</li>
+  </ol>
+
+  <div id="game" hidden>
+    <div class="hud"><div class="teams" id="teams"></div><div class="dots" id="dots" aria-hidden="true"></div></div>
+    <div class="hand" id="hand" aria-live="polite"></div>
+    <ol class="line" id="line"></ol>
+    <div class="end" id="end" hidden></div>
+  </div>
+</div>
+
+<script type="application/json" id="data">[{"id":"shays","n":"Shays’ Rebellion","real":"Shays’ Rebellion","clue":"Indebted farmers in western Massachusetts closed county courts and marched on the federal arsenal at Springfield.","why":"The Confederation Congress could not raise a force to stop it, which convinced many leaders that the Articles of Confederation needed replacing.","date":"August 1786 to February 1787","y":1786,"m":8},{"id":"annapolis","n":"Annapolis Convention","real":"Annapolis Convention","clue":"Delegates from five states met in Maryland to fix the trade problems between states under the Articles of Confederation.","why":"Too few states came to act, so the delegates called for a full convention in Philadelphia the next year.","date":"September 1786","y":1786,"m":9},{"id":"convention","n":"Constitutional Convention","real":"Constitutional Convention","clue":"Fifty-five delegates from every state except Rhode Island met in Philadelphia, sent only to revise the Articles of Confederation.","why":"They met in secret, set the Articles aside, and wrote a new Constitution with a much stronger central government.","date":"May to September 1787","y":1787,"m":5},{"id":"great_compromise","n":"Great Compromise (Connecticut Compromise)","real":"Great Compromise (Connecticut Compromise)","clue":"Roger Sherman’s deal: a House based on population and a Senate with two seats for every state.","why":"It settled the large-state against small-state fight and kept the Convention together.","date":"July 1787","y":1787,"m":7},{"id":"federalist","n":"The Federalist (Federalist Papers)","real":"The Federalist (Federalist Papers)","clue":"Eighty-five newspaper essays by Hamilton, Madison, and John Jay urging New York to ratify.","why":"They remain the best explanation of what the framers intended, though the promise of a Bill of Rights did more to win ratification.","date":"October 1787 to 1788","y":1787,"m":10},{"id":"ratification","n":"Ratification of the Constitution","real":"Ratification of the Constitution","clue":"Special conventions in each state voted on the Constitution, which needed nine of the thirteen. New Hampshire became the ninth.","why":"Virginia and New York, the two states the new government could not work without, followed within weeks.","date":"June 21, 1788 (ninth state)","y":1788,"m":6},{"id":"bill_of_rights","n":"Bill of Rights","real":"Bill of Rights","clue":"The first ten amendments, which list individual rights and reserve other powers to the states and the people.","why":"Federalists promised it to win ratification, and it limited the new federal government from the start.","date":"Ratified December 1791","y":1791,"m":12},{"id":"washington_inaug","n":"Washington takes office","real":"Washington takes office","clue":"George Washington was sworn in as the first president, in New York City.","why":"The government described on paper in the Constitution now had to be built in practice.","date":"April 30, 1789","y":1789,"m":4},{"id":"judiciary_1789","n":"Congress creates the federal court system","real":"Judiciary Act of 1789","clue":"The law that built the federal court system: a Supreme Court of six justices, with district and circuit courts below it.","why":"The Constitution created only a Supreme Court. Part of this act was later struck down in Marbury v. Madison.","date":"September 1789","y":1789,"m":9},{"id":"dc_compromise","n":"The capital bargain","real":"Compromise of 1790 (the capital bargain)","clue":"At a dinner hosted by Jefferson, Madison agreed to stop blocking assumption and Hamilton agreed to support a capital on the Potomac River.","why":"It shows how early sectional bargains worked: the North got the finance plan and the South got the capital.","date":"Summer 1790","y":1790,"m":6},{"id":"bank_us","n":"First Bank of the United States","real":"First Bank of the United States","clue":"A national bank, mostly privately owned, chartered by Congress for twenty years to hold federal funds and issue a stable currency.","why":"Jefferson called it unconstitutional and Hamilton defended it with implied powers. Its charter ran out in 1811.","date":"Chartered February 1791","y":1791,"m":2},{"id":"neutrality","n":"Neutrality Proclamation","real":"Neutrality Proclamation","clue":"Washington declared the United States friendly and impartial toward both Britain and France.","why":"It set aside the 1778 alliance with France in practice and began the long tradition of staying out of Europe’s wars.","date":"April 1793","y":1793,"m":4},{"id":"cotton_gin","n":"Cotton gin","real":"Cotton gin","clue":"Eli Whitney’s machine for separating cotton fiber from its seeds.","why":"It made short-staple cotton hugely profitable, spread plantation slavery across the Deep South, and raised the stakes of every later fight over slavery in the West.","date":"1793","y":1793,"m":0},{"id":"fallen_timbers","n":"Battle of Fallen Timbers","real":"Battle of Fallen Timbers","clue":"General Anthony Wayne defeated the Northwest Confederacy of Native nations (Shawnee, Miami, Delaware, and others) in what is now Ohio.","why":"Britain’s nearby fort refused to shelter its allies, which broke the confederacy and led to the Treaty of Greenville.","date":"August 1794","y":1794,"m":8},{"id":"whiskey","n":"Whiskey Rebellion","real":"Whiskey Rebellion","clue":"Farmers in western Pennsylvania attacked tax collectors rather than pay the excise tax on whiskey.","why":"Washington called out about 13,000 militia and the revolt melted away. The new government showed it could enforce its laws, unlike the Confederation during Shays’ Rebellion.","date":"July to November 1794","y":1794,"m":7},{"id":"jay_treaty","n":"Jay’s Treaty","real":"Jay’s Treaty","clue":"Britain agreed to leave its forts in the Northwest and pay for some seized ships. It did not stop seizing ships or impressing sailors.","why":"It avoided war with Britain but outraged Democratic-Republicans and France, and it pushed Spain to make its own deal.","date":"Signed November 1794; ratified 1795","y":1794,"m":11},{"id":"greenville","n":"Treaty of Greenville","real":"Treaty of Greenville","clue":"After Fallen Timbers, the Native confederacy gave up most of what is now Ohio in exchange for payments and a recognized boundary.","why":"It opened the Ohio country to settlers. The boundary did not hold, which set up Tecumseh’s resistance a decade later.","date":"August 1795","y":1795,"m":8},{"id":"pinckney","n":"Pinckney’s Treaty","real":"Pinckney’s Treaty","clue":"Spain gave Americans free navigation of the Mississippi River, the right to store goods at New Orleans, and a Florida border at the 31st parallel.","why":"Western farmers could now ship their crops to market. Losing the right to store goods at New Orleans in 1802 added urgency to Jefferson’s effort to buy the city.","date":"October 1795","y":1795,"m":10},{"id":"farewell","n":"Washington’s Farewell Address","real":"Washington’s Farewell Address","clue":"A published letter in which Washington announced he would not serve a third term and warned against political parties and permanent foreign alliances.","why":"It set the two-term tradition and guided American foreign policy for more than a century.","date":"September 1796","y":1796,"m":9},{"id":"election_1796","n":"Adams defeats Jefferson for president","real":"Election of 1796","clue":"The first contested presidential election. Federalist John Adams beat Jefferson 71 electoral votes to 68, and Jefferson became vice president.","why":"The runner-up rule put rivals from opposing parties in the same administration.","date":"1796","y":1796,"m":12},{"id":"xyz","n":"XYZ Affair","real":"XYZ Affair","clue":"French agents demanded a bribe before they would let American envoys meet the foreign minister, Talleyrand.","why":"When the story came out in 1798 Americans were furious (“millions for defense, but not one cent for tribute”) and an undeclared naval war followed.","date":"1797 to 1798","y":1797,"m":10},{"id":"alien_sedition","n":"Alien and Sedition Acts","real":"Alien and Sedition Acts","clue":"Four Federalist laws: a fourteen-year wait for citizenship, power to deport foreigners, and fines and prison for false, scandalous, and malicious criticism of the government.","why":"They were aimed at immigrants, who tended to vote Democratic-Republican, and at opposition newspaper editors.","date":"June to July 1798","y":1798,"m":7},{"id":"va_ky","n":"Virginia and Kentucky Resolutions","real":"Virginia and Kentucky Resolutions","clue":"Written in secret by Madison (Virginia) and Jefferson (Kentucky), they argued that the states had made the Constitution and could judge when a federal law broke it.","why":"No other state agreed, but the idea of nullification came back at the Hartford Convention and in South Carolina in the 1830s.","date":"1798 to 1799","y":1798,"m":11},{"id":"convention_1800","n":"Treaty ending the Quasi-War with France","real":"Convention of 1800","clue":"The treaty that ended the Quasi-War and released the United States from its Revolutionary War alliance with France.","why":"Peace cost Adams the support of Hamilton’s wing of his party, and it freed the United States from its only formal alliance.","date":"September 1800","y":1800,"m":9},{"id":"election_1800","n":"Jefferson and Burr tie for president","real":"Election of 1800","clue":"Jefferson and his running mate Aaron Burr tied at 73 electoral votes, and the House took 36 ballots to choose Jefferson.","why":"Jefferson called it the Revolution of 1800: power passed from one party to its rival peacefully.","date":"1800; decided by the House in February 1801","y":1800,"m":12},{"id":"judiciary_1801","n":"Adams appoints the midnight judges","real":"Judiciary Act of 1801 and the midnight judges","clue":"After losing the election, Federalists created new federal judgeships and Adams filled them in his last days in office.","why":"It kept Federalists in the one branch they still controlled. Jefferson’s Congress repealed the act in 1802. A commission for a lesser court post created that same month went undelivered and led to Marbury v. Madison.","date":"February to March 1801","y":1801,"m":2},{"id":"twelfth","n":"Twelfth Amendment","real":"Twelfth Amendment","clue":"Electors now cast separate ballots for president and vice president.","why":"It fixed the flaw that produced the Jefferson and Burr tie in 1800.","date":"Ratified June 1804","y":1804,"m":6},{"id":"marbury","n":"Marbury v. Madison","real":"Marbury v. Madison","clue":"William Marbury sued for his undelivered commission as a justice of the peace, one of Adams’s last-minute appointments. The Court said he deserved it but that the law letting him sue there was unconstitutional.","why":"It established judicial review: the Supreme Court can strike down an act of Congress.","date":"February 1803","y":1803,"m":2},{"id":"jefferson_inaug","n":"Jefferson takes office","real":"Jefferson takes office","clue":"Jefferson became the third president and the first inaugurated in Washington, D.C.","why":"“We are all Republicans, we are all Federalists.” He kept much of Hamilton’s system while cutting taxes, debt, and the military.","date":"March 4, 1801","y":1801,"m":3},{"id":"barbary","n":"Barbary States and the Tripolitan War","real":"Barbary States and the Tripolitan War","clue":"North African states demanded tribute to leave American merchant ships alone. Jefferson refused to pay more and sent the navy to fight Tripoli.","why":"It pushed a president who distrusted navies into using one, far from home in the Mediterranean.","date":"1801 to 1805","y":1801,"m":5},{"id":"louisiana","n":"Louisiana Purchase","real":"Louisiana Purchase","clue":"The United States bought the whole Louisiana Territory from France for $15 million, about doubling the country’s size.","why":"The Constitution says nothing about buying territory, so the strict constructionist president had to read it loosely. It also opened the question of slavery in the West.","date":"Signed April 1803; ratified October 1803","y":1803,"m":4},{"id":"lewis_clark","n":"Lewis and Clark expedition","real":"Lewis and Clark expedition","clue":"Jefferson’s Corps of Discovery traveled from St. Louis to the Pacific and back, with help from Sacagawea and many Native nations. Zebulon Pike explored the Southwest soon after.","why":"It mapped the new territory, opened relations with western nations, and strengthened the American claim to Oregon.","date":"May 1804 to September 1806","y":1804,"m":5},{"id":"duel","n":"Hamilton and Burr duel","real":"Hamilton and Burr duel","clue":"Vice President Aaron Burr shot Alexander Hamilton at Weehawken, New Jersey, after Hamilton worked to defeat him in the race for governor of New York.","why":"The Federalists lost their most capable leader.","date":"July 1804","y":1804,"m":7},{"id":"chesapeake","n":"Chesapeake and Leopard affair","real":"Chesapeake and Leopard affair","clue":"A British warship fired on the U.S. Navy ship Chesapeake off Virginia and took four sailors.","why":"Americans demanded war. Jefferson answered with the embargo.","date":"June 1807","y":1807,"m":6},{"id":"embargo","n":"Embargo Act","real":"Embargo Act","clue":"Congress banned all American exports to foreign ports, hoping to force Britain and France to respect neutral rights.","why":"It hurt Americans far more than Europeans, revived the Federalists in New England, and pushed investment into American factories.","date":"December 1807","y":1807,"m":12},{"id":"slave_trade_ban","n":"Ban on importing enslaved people","real":"Ban on importing enslaved people","clue":"Congress outlawed the international slave trade, effective on the first day the Constitution allowed.","why":"It did not end slavery or the trade within the country, which grew as cotton spread west.","date":"Took effect January 1, 1808","y":1808,"m":1},{"id":"non_intercourse","n":"Non-Intercourse Act","real":"Non-Intercourse Act","clue":"It replaced the embargo, reopening trade with every country except Britain and France.","why":"A retreat from the embargo that still failed to change British or French policy.","date":"March 1809","y":1809,"m":3},{"id":"macon","n":"Macon’s Bill No. 2","real":"Macon’s Bill No. 2","clue":"It reopened trade with both Britain and France and promised that if either one respected American shipping, the United States would cut off the other.","why":"Napoleon made an empty promise, Madison cut off Britain, and the two countries moved closer to war.","date":"May 1810","y":1810,"m":5},{"id":"bank_expires","n":"First Bank’s charter expires","real":"First Bank’s charter expires","clue":"Congress refused, by one vote, to renew the First Bank of the United States.","why":"The country then fought the War of 1812 without a national bank, and the financial mess changed many Democratic-Republicans’ minds.","date":"1811","y":1811,"m":3},{"id":"tippecanoe","n":"Battle of Tippecanoe","real":"Battle of Tippecanoe","clue":"William Henry Harrison, governor of Indiana Territory, marched on Prophetstown while Tecumseh was away, beat back an attack by the Prophet’s warriors, and burned the town.","why":"British weapons found there convinced westerners that Britain was behind Native resistance, and it drove Tecumseh into a British alliance.","date":"November 1811","y":1811,"m":11},{"id":"war_1812","n":"Congress declares war on Britain","real":"War of 1812","clue":"The United States went to war with Britain over impressment, interference with trade, and British support for Native resistance.","why":"It ended in a draw, yet Americans came out of it with new national pride, new factories, and a broken Federalist party.","date":"Declared June 1812; peace 1815","y":1812,"m":6},{"id":"horseshoe","n":"Battle of Horseshoe Bend","real":"Battle of Horseshoe Bend","clue":"Andrew Jackson’s militia, with Cherokee and Creek allies, crushed the Red Stick Creeks in what is now Alabama.","why":"The Creeks were forced to give up some 23 million acres, opening the Deep South to cotton planters.","date":"March 1814","y":1814,"m":3},{"id":"dc_burned","n":"Burning of Washington","real":"Burning of Washington","clue":"British troops captured the capital and burned the Capitol and the White House.","why":"The low point of the war for the United States.","date":"August 1814","y":1814,"m":8},{"id":"mchenry","n":"Fort McHenry and “The Star-Spangled Banner”","real":"Fort McHenry and “The Star-Spangled Banner”","clue":"Baltimore’s fort held out through a night of British bombardment, and Francis Scott Key wrote the poem that became the national anthem.","why":"A defensive stand that Americans turned into a symbol of national pride.","date":"September 1814","y":1814,"m":9},{"id":"hartford","n":"Hartford Convention","real":"Hartford Convention","clue":"New England Federalists met to protest the war and propose amendments limiting embargoes, war declarations, and the South’s power.","why":"Their demands reached Washington along with news of peace and of New Orleans. The party looked disloyal and never recovered.","date":"December 1814 to January 1815","y":1814,"m":12},{"id":"ghent","n":"Treaty of Ghent","real":"Treaty of Ghent","clue":"The peace treaty that ended the war with Britain by returning everything to the way it was before the war.","why":"Neither impressment nor neutral rights was mentioned. The war settled little on paper and a great deal in how Americans saw themselves.","date":"Signed December 24, 1814","y":1814,"m":12},{"id":"new_orleans","n":"Battle of New Orleans","real":"Battle of New Orleans","clue":"Andrew Jackson’s mixed force decisively defeated a British army, two weeks after the peace treaty was signed but before the news arrived.","why":"It made Jackson a national hero and let Americans remember the war as a victory.","date":"January 8, 1815","y":1815,"m":1},{"id":"second_bank","n":"Second Bank of the United States","real":"Second Bank of the United States","clue":"A new national bank chartered for twenty years, signed by Madison, who had opposed the first one.","why":"Its loose lending and then sudden tightening of credit helped bring on the Panic of 1819, and westerners never forgave it.","date":"Chartered April 1816","y":1816,"m":4},{"id":"tariff_1816","n":"First protective tariff","real":"Tariff of 1816","clue":"The first tariff written mainly to protect American manufacturers, not just to raise money.","why":"It shielded the factories that grew up during the embargo and the war from cheap British goods.","date":"April 1816","y":1816,"m":4},{"id":"election_1816","n":"Monroe elected president","real":"Election of 1816","clue":"James Monroe of Virginia easily defeated Federalist Rufus King.","why":"The last election in which the Federalists ran a presidential candidate.","date":"1816","y":1816,"m":12},{"id":"convention_1818","n":"Treaty setting the Canadian border at the 49th parallel","real":"Convention of 1818","clue":"The United States and Britain set the border with Canada at the 49th parallel as far as the Rockies and agreed to share Oregon for ten years.","why":"With Rush-Bagot, it turned the old enemy into a neighbor with a settled border.","date":"October 1818","y":1818,"m":10},{"id":"jackson_florida","n":"Jackson in Florida","real":"Jackson in Florida","clue":"Chasing Seminole raiders, Andrew Jackson invaded Spanish Florida, seized Spanish forts, and executed two British subjects.","why":"He went beyond his orders, but it showed Spain could not hold Florida and gave John Quincy Adams the leverage to demand it.","date":"1818","y":1818,"m":3},{"id":"adams_onis","n":"Adams-Onís Treaty","real":"Adams-Onís Treaty","clue":"Spain gave Florida to the United States and agreed to a border running all the way to the Pacific. The United States gave up its claim to Texas.","why":"The first American treaty line to reach the Pacific Ocean.","date":"February 1819","y":1819,"m":2},{"id":"panic_1819","n":"First major depression","real":"Panic of 1819","clue":"The first major depression: land speculation collapsed, the Second Bank called in loans, banks failed, and farms were foreclosed.","why":"Westerners blamed the Bank, hard times lasted into the 1820s, and debtors began demanding a voice in politics.","date":"1819","y":1819,"m":0},{"id":"mcculloch","n":"McCulloch v. Maryland","real":"McCulloch v. Maryland","clue":"Maryland tried to tax the Second Bank. The Court ruled that Congress had the implied power to create a bank and that a state could not tax a federal institution.","why":"“The power to tax involves the power to destroy.” Federal law stands above state law.","date":"March 1819","y":1819,"m":3},{"id":"gibbons","n":"Gibbons v. Ogden","real":"Gibbons v. Ogden","clue":"New York had granted a steamboat monopoly. The Court ruled that Congress’s power over commerce between states, including navigation, overrides a conflicting state law.","why":"It gave the federal government broad power over the national economy.","date":"March 1824","y":1824,"m":3},{"id":"tallmadge","n":"Tallmadge Amendment","real":"Tallmadge Amendment","clue":"A New York congressman proposed admitting Missouri only if it stopped importing enslaved people and freed their children at age twenty-five.","why":"It passed the House, failed in the Senate, and turned Missouri statehood into a national fight over slavery.","date":"February 1819","y":1819,"m":2},{"id":"missouri","n":"Missouri Compromise","real":"Missouri Compromise","clue":"Missouri entered as a slave state, Maine as a free state, and slavery was banned in the rest of the Louisiana Purchase north of 36°30′.","why":"It kept the Senate balanced and quieted the issue for a generation. Jefferson wrote that the Missouri question, “like a fire bell in the night,” filled him with terror.","date":"March 1820","y":1820,"m":3},{"id":"monroe_doctrine","n":"Monroe Doctrine","real":"Monroe Doctrine","clue":"President Monroe told Europe that the Americas were closed to new colonies and that the United States would stay out of Europe’s affairs.","why":"The United States could not enforce it yet (Britain’s navy did), but it became the foundation of American policy in the hemisphere.","date":"December 1823","y":1823,"m":12},{"id":"election_1824","n":"The “corrupt bargain” election","real":"Election of 1824 and the “corrupt bargain”","clue":"Four Democratic-Republicans split the vote. Jackson led, but the House chose John Quincy Adams, who then made Henry Clay secretary of state.","why":"It ended the Era of Good Feelings and one-party politics. The department treats it as the bridge to the next unit.","date":"1824 to 1825","y":1824,"m":12}]</script>
+<script src="config.js"></script>
+<script src="progress.js"></script>
+<script>
+(function () {
+  'use strict';
+  var PR = window.Progress || null;
+  var CARDS = JSON.parse(document.getElementById('data').textContent);
+  var S = { scope: 'all', len: 8, level: 'std', teams: 1, big: 0, deck: [], placed: [], i: 0, phase: 'setup', scores: [], marks: [], last: null };
+  if (PR) PR.update(function (p) { p.tl.total = CARDS.length; });
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function ls(k, v) { try { if (v === undefined) return localStorage.getItem('apush3.' + k); localStorage.setItem('apush3.' + k, v); } catch (e) { return null; } }
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  // a card with no month covers its whole year, so it ties with anything else in that year
+  function lo(c) { return c.y * 12 + (c.m || 1); }
+  function hi(c) { return c.y * 12 + (c.m || 12); }
+  function fits(c, i, placed) {
+    for (var k = 0; k < placed.length; k++) { if (k < i) { if (lo(placed[k]) > hi(c)) return false; } else if (hi(placed[k]) < lo(c)) return false; }
+    return true;
+  }
+  function home(c, placed) { for (var i = 0; i <= placed.length; i++) if (fits(c, i, placed)) return i; return placed.length; }
+  function pool() { return CARDS.filter(function (c) { return S.scope === 'all' || (S.scope === 'a' ? c.y <= 1800 : c.y >= 1800); }); }
+  function deal() {
+    var p = shuffle(pool()), out = [], years = {};
+    for (var i = 0; i < p.length && out.length < S.len + 1; i++) {
+      if (S.level === 'std') { if (years[p[i].y]) continue; years[p[i].y] = 1; }
+      out.push(p[i]);
+    }
+    return out;
+  }
+  function teamName(t) { return S.teams === 1 ? 'You' : 'Pod ' + (t + 1); }
+  function turn() { return S.i % S.teams; }
+
+  function start() {
+    var d = deal(); S.deck = d.slice(1); S.placed = [{ c: d[0], st: 'anchor' }]; S.i = 0; S.phase = 'place'; S.last = null; S.marks = [];
+    S.scores = []; for (var t = 0; t < S.teams; t++) S.scores.push(0);
+    $('game').hidden = false; $('how').hidden = true; $('end').hidden = true; $('start').textContent = 'Start over';
+    render();
+    try { $('game').scrollIntoView({ block: 'start' }); } catch (e) {}
+  }
+  function place(slot) {
+    if (S.phase !== 'place') return;
+    var c = S.deck[S.i], plain = S.placed.map(function (p) { return p.c; });
+    var ok = fits(c, slot, plain), at = ok ? slot : home(c, plain);
+    S.placed.forEach(function (p) { p.fresh = false; });
+    S.placed.splice(at, 0, { c: c, st: ok ? 'ok' : 'no', fresh: true });
+    if (ok) S.scores[turn()]++;
+    if (PR) PR.update(function (p) { var k = p.tl.cards[c.id] || (p.tl.cards[c.id] = { ok: 0, no: 0 }); if (ok) k.ok++; else k.no++; });
+    S.marks.push(ok); S.last = { ok: ok, c: c }; S.phase = 'result';
+    render();
+  }
+  function next() {
+    S.i++; S.last = null;
+    if (S.i >= S.deck.length) { S.phase = 'done'; finish(); } else S.phase = 'place';
+    render();
+    if (S.phase === 'place') { try { $('hand').scrollIntoView({ block: 'nearest' }); } catch (e) {} }
+  }
+  function finish() {
+    var total = S.deck.length, h = '';
+    if (PR) {
+      var sc0 = S.teams === 1 ? S.scores[0] : Math.max.apply(null, S.scores);
+      PR.update(function (p) { p.tl.games.push({ scope: S.scope, len: S.len, level: S.level, teams: S.teams, score: sc0, total: total, at: new Date().toISOString() }); if (p.tl.games.length > 100) p.tl.games.splice(0, p.tl.games.length - 100); });
+      PR.event('tl', 'timeline_complete', { score: sc0, total: total, detail: { scope: S.scope, len: S.len, level: S.level, teams: S.teams } });
+    }
+    if (S.teams === 1) {
+      var sc = S.scores[0], key = 'tl.best.' + S.scope + '.' + S.len + '.' + S.level, best = parseInt(ls(key) || '-1', 10);
+      if (sc > best) { ls(key, String(sc)); }
+      h = '<div class="big">' + sc + ' of ' + total + ' placed correctly</div><p class="muted" style="margin:4px 0 0">' + (best >= 0 ? (sc > best ? 'A new best for these settings. Your old best was ' + best + '.' : 'Your best for these settings is ' + best + '.') : 'Read back down the line: each card says why it matters.') + '</p>';
+    } else {
+      var max = Math.max.apply(null, S.scores), win = []; S.scores.forEach(function (s, t) { if (s === max) win.push('Pod ' + (t + 1)); });
+      h = '<div class="big">' + (win.length === 1 ? win[0] + ' wins' : 'Tie: ' + win.join(', ')) + '</div><p class="muted" style="margin:4px 0 0">' + S.scores.map(function (s, t) { return 'Pod ' + (t + 1) + ': ' + s; }).join(' · ') + '</p>';
+    }
+    h += '<div class="acts"><button class="btn primary" id="again">Play again</button><button class="btn" id="settings">Change settings</button></div>';
+    $('end').innerHTML = h; $('end').hidden = false;
+  }
+
+  function render() {
+    // scoreboard
+    var th = '';
+    for (var t = 0; t < S.teams; t++) th += '<span class="team"' + (S.phase !== 'done' && t === turn() ? ' aria-current="true"' : '') + '>' + teamName(t) + ': ' + S.scores[t] + '</span>';
+    $('teams').innerHTML = th;
+    var dh = '';
+    for (var k = 0; k < S.deck.length; k++) dh += '<i class="' + (k < S.marks.length ? (S.marks[k] ? 'ok' : 'no') : (k === S.i && S.phase !== 'done' ? 'now' : '')) + '"></i>';
+    $('dots').innerHTML = dh;
+    // card in hand
+    var hand = $('hand'); hand.className = 'hand'; hand.hidden = false;
+    if (S.phase === 'place') {
+      var c = S.deck[S.i];
+      hand.innerHTML = '<div class="lab">' + (S.teams > 1 ? teamName(turn()) + ' · ' : '') + 'Card ' + (S.i + 1) + ' of ' + S.deck.length + ' · Where does it go?</div><p class="ttl">' + esc(c.n) + '</p><p class="clue">' + esc(c.clue) + '</p>';
+    } else if (S.phase === 'result') {
+      var L = S.last; hand.className = 'hand ' + (L.ok ? 'res-ok' : 'res-no');
+      hand.innerHTML = '<div class="lab">' + (L.ok ? 'Right place' : 'Not there. It has moved to its real place.') + '</div><p class="ttl">' + esc(L.c.real) + '</p><p class="date">' + esc(L.c.date) + '</p><p class="clue">' + esc(L.c.why) + '</p>' +
+        '<div class="acts"><button class="btn primary" id="next">' + (S.i + 1 >= S.deck.length ? 'See how you did' : 'Next card') + '</button></div>';
+    } else { hand.hidden = true; }
+    // the line
+    var h = '', placing = S.phase === 'place';
+    function slot(i) {
+      var before = S.placed[i - 1], after = S.placed[i], lab;
+      if (!before) lab = 'Before ' + after.c.y; else if (!after) lab = 'After ' + before.c.y; else lab = 'Between ' + before.c.y + ' and ' + after.c.y;
+      if (before && after && before.c.y === after.c.y) lab = 'Between these two in ' + after.c.y;
+      return '<li class="slot"><button data-slot="' + i + '">Place it here <span class="muted" style="font-weight:400">· ' + lab + '</span></button></li>';
+    }
+    for (var i = 0; i < S.placed.length; i++) {
+      if (placing) h += slot(i);
+      var p = S.placed[i], done = S.phase === 'done';
+      h += '<li class="ev ' + p.st + (p.fresh ? ' fresh' : '') + '"><div class="yr">' + p.c.y + '</div><div class="box"><div class="nm">' + esc(p.c.real) + '</div><div class="dt">' + esc(p.c.date) +
+        ' <span class="mark">' + (p.st === 'anchor' ? '· starting card' : p.st === 'ok' ? '· placed correctly' : '· missed') + '</span></div>' + (done || p.st === 'anchor' ? '<p class="wy">' + esc(done ? p.c.why : p.c.clue) + '</p>' : '') + '</div></li>';
+    }
+    if (placing) h += slot(S.placed.length);
+    $('line').innerHTML = h;
+    var nb = $('next'); if (nb) { try { nb.focus({ preventScroll: true }); } catch (e) {} }
+  }
+
+  function seg(id, key, cast) {
+    $(id).addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      S[key] = cast ? cast(b.dataset.v) : b.dataset.v;
+      Array.prototype.forEach.call(this.querySelectorAll('button'), function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      if (key === 'big') $('root').classList.toggle('big-text', S.big === 1);
+      ls('tl.' + key, String(S[key]));
+    });
+  }
+  seg('o-scope', 'scope'); seg('o-len', 'len', Number); seg('o-level', 'level'); seg('o-big', 'big', Number);
+  $('o-teams').addEventListener('change', function () { S.teams = parseInt(this.value, 10) || 1; });
+  $('start').addEventListener('click', start);
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('button') : null; if (!b) return;
+    if (b.dataset.slot !== undefined) place(parseInt(b.dataset.slot, 10));
+    else if (b.id === 'next') next();
+    else if (b.id === 'again') start();
+    else if (b.id === 'settings') { try { window.scrollTo(0, 0); } catch (e2) {} $('o-scope').querySelector('button').focus(); }
+  });
+  // remembered settings
+  ['scope', 'len', 'level', 'big'].forEach(function (k) {
+    var v = ls('tl.' + k); if (v === null) return;
+    var b = $('o-' + k).querySelector('button[data-v="' + v + '"]'); if (b) b.click();
+  });
+})();
+</script>
+
+</body>
+</html>

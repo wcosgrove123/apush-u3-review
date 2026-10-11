@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Eight Lenses</title>
+<meta name="description" content="Explain one APUSH Unit III term through each of the eight AP themes.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F3F4F1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#15171A" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one term on a card at the top; the eight themes sit beneath it as a 4 by 2 board of tiles (2 by 4 on a phone). Each theme keeps one color everywhere. */
+:root {
+  --bg: #F3F4F1; --fg: #17191C; --muted: #5A5E66; --rule: #D5D8D2; --panel: #FFFFFF; --panel2: #E9EBE6;
+  --ink: #1F5FBF; --ink-bg: #E3ECFA; --on-ink: #FFFFFF;
+  --good: #1D7443; --good-bg: #E2F1E8; --bad: #A1311F; --bad-bg: #F7E5E1; --warn: #8A5A00; --warn-bg: #FAEFD6;
+  --t-NAT: #2a78d6; --t-WXT: #eb6834; --t-GEO: #1baf7a; --t-MIG: #eda100; --t-PCE: #e87ba4; --t-WOR: #008300; --t-ARC: #6250d6; --t-SOC: #e34948;
+  --display: "Newsreader", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15171A; --fg: #ECEAE4; --muted: #A6A8AD; --rule: #343840; --panel: #1D2025; --panel2: #262A31;
+  --ink: #7FA9EE; --ink-bg: #1D2A40; --on-ink: #10151D;
+  --good: #6FCF97; --good-bg: #17301F; --bad: #E8806E; --bad-bg: #3A1F1A; --warn: #E0B44A; --warn-bg: #3A3015;
+  --t-NAT: #3987e5; --t-WXT: #d95926; --t-GEO: #199e70; --t-MIG: #c98500; --t-PCE: #d55181; --t-WOR: #008300; --t-ARC: #9085e9; --t-SOC: #e66767; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #15171A; --fg: #ECEAE4; --muted: #A6A8AD; --rule: #343840; --panel: #1D2025; --panel2: #262A31;
+  --ink: #7FA9EE; --ink-bg: #1D2A40; --on-ink: #10151D;
+  --good: #6FCF97; --good-bg: #17301F; --bad: #E8806E; --bad-bg: #3A1F1A; --warn: #E0B44A; --warn-bg: #3A3015;
+  --t-NAT: #3987e5; --t-WXT: #d95926; --t-GEO: #199e70; --t-MIG: #c98500; --t-PCE: #d55181; --t-WOR: #008300; --t-ARC: #9085e9; --t-SOC: #e66767; color-scheme: dark }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.5; margin: 0; }
+button, select, textarea, input { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+h1 { font-family: var(--display); font-weight: 600; font-size: clamp(28px, 5vw, 40px); line-height: 1.05; margin: 0 0 6px; text-wrap: balance; letter-spacing: -.01em; }
+h2 { font-family: var(--display); font-weight: 600; font-size: 24px; line-height: 1.15; margin: 0 0 6px; text-wrap: balance; }
+p { margin: 0 0 10px; }
+.eyebrow { font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.muted { color: var(--muted); }
+.mono { font-family: var(--mono); }
+.btn { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 16px; cursor: pointer; font-weight: 500; }
+.btn:hover:not(:disabled) { background: var(--panel2); }
+.btn:disabled { opacity: .45; cursor: default; }
+.btn.primary { background: var(--ink); border-color: var(--ink); color: var(--on-ink); }
+.btn.primary:hover:not(:disabled) { background: var(--ink); filter: brightness(1.08); }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: var(--panel); }
+.seg button { background: none; border: 0; border-right: 1px solid var(--rule); padding: 6px 12px; cursor: pointer; font-size: 14px; color: var(--muted); }
+.seg button:last-child { border-right: 0; }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.opt { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.opt > span { font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 50%; flex: none; }
+
+.wrap { max-width: 1120px; margin: 0 auto; padding-block: 22px 72px; padding-inline: 18px; }
+.lede { font-size: 17px; max-width: 64ch; margin-bottom: 0; }
+.bar { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: flex-end; margin-top: 18px; }
+.bar select { padding: 7px 10px; border: 1px solid var(--rule); border-radius: 6px; background: var(--panel); max-width: 100%; }
+.bar .grow { flex: 1; }
+.term { margin-top: 16px; padding: 18px 20px; background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; }
+.term .when { font-family: var(--mono); font-size: 13px; color: var(--muted); }
+.term .name { font-family: var(--display); font-weight: 600; font-size: clamp(26px, 4.6vw, 38px); line-height: 1.08; margin: 2px 0 6px; text-wrap: balance; }
+.term .blurb { margin: 0; max-width: 70ch; font-size: 16.5px; }
+.prog { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-top: 14px; font-size: 14px; color: var(--muted); }
+.pips { display: flex; gap: 4px; }
+.pips i { width: 22px; height: 8px; border-radius: 2px; background: var(--panel2); display: block; }
+.pips i.on { background: var(--fg); }
+
+.board { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+.tile { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 13px 14px 14px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.tile .hd { display: flex; align-items: center; gap: 8px; }
+.tile .code { font-family: var(--mono); font-size: 12.5px; font-weight: 500; letter-spacing: .04em; }
+.tile .pod { margin-left: auto; font-family: var(--mono); font-size: 11.5px; color: var(--muted); border: 1px solid var(--rule); border-radius: 999px; padding: 1px 8px; }
+.tile .tn { font-weight: 600; font-size: 15px; line-height: 1.25; }
+.tile .q { font-size: 14px; color: var(--muted); margin: 0; }
+.tile textarea { width: 100%; min-height: 54px; resize: vertical; padding: 7px 9px; border: 1px solid var(--rule); border-radius: 6px; background: var(--bg); font-size: 14.5px; }
+.tile .model { font-family: var(--display); font-size: 17px; line-height: 1.4; margin: 0; padding-top: 9px; border-top: 2px solid var(--tc, var(--rule)); }
+.tile .reach { font-size: 12.5px; color: var(--warn); background: var(--warn-bg); border-radius: 4px; padding: 2px 7px; align-self: flex-start; }
+.tile .rate { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+.tile .rate button { font-size: 13px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--rule); background: var(--panel); cursor: pointer; }
+.tile .rate button:hover { background: var(--panel2); }
+.tile .rate button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.tile .show { margin-top: auto; align-self: flex-start; font-size: 14px; padding: 6px 12px; }
+
+.quiz { margin-top: 16px; padding: 18px 20px; background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; max-width: 760px; }
+.quiz .sent { font-family: var(--display); font-size: 21px; line-height: 1.4; margin: 10px 0 16px; }
+.choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.choices button { display: flex; align-items: center; gap: 9px; text-align: left; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 8px; background: var(--panel); cursor: pointer; min-width: 0; }
+.choices button:hover:not(:disabled) { background: var(--panel2); }
+.choices button:disabled { cursor: default; }
+.choices button.right { border-color: var(--good); background: var(--good-bg); }
+.choices button.wrong { border-color: var(--bad); background: var(--bad-bg); }
+.choices .cn { font-weight: 500; font-size: 15px; line-height: 1.25; }
+.fb { margin-top: 14px; }
+.fb .v { font-family: var(--mono); font-size: 12px; letter-spacing: .05em; font-weight: 500; }
+.fb .v.ok { color: var(--good); } .fb .v.no { color: var(--bad); }
+.timer { font-family: var(--mono); font-size: 26px; font-variant-numeric: tabular-nums; min-width: 78px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 26px; padding-top: 14px; border-top: 1px solid var(--rule); font-size: 13.5px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.note { font-size: 14px; color: var(--muted); max-width: 70ch; margin-top: 10px; }
+@media (max-width: 980px) { .board { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .board { grid-template-columns: minmax(0, 1fr); } .choices { grid-template-columns: minmax(0, 1fr); } }
+:root { color-scheme: light; }
+[hidden] { display: none !important; }
+.top { font-size: 13px; margin-bottom: 10px; } .top a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--rule); } .top a:hover { color: var(--ink); border-color: var(--ink); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <nav class="top"><a href="./">All Unit III review games</a></nav>
+    <div class="eyebrow">APUSH · Unit III · 1786 to 1824</div>
+    <h1>Eight Lenses</h1>
+    <p class="lede">One term, eight ways to explain it. Each AP theme asks a different question about the same event.</p>
+  </header>
+
+  <div class="bar">
+    <div class="opt"><span>Mode</span><div class="seg" id="mode">
+      <button data-v="explain" aria-pressed="true">Explain it</button><button data-v="quiz" aria-pressed="false">Name the lens</button><button data-v="class" aria-pressed="false">Class round</button></div></div>
+    <div class="opt" id="pickwrap"><span>Term</span><select id="pick" aria-label="Choose a term"></select></div>
+    <div class="opt" id="randwrap"><span>&nbsp;</span><button class="btn" id="rand">Random term</button></div>
+  </div>
+
+  <section id="explain">
+    <div class="term" id="termcard"></div>
+    <div class="prog" id="prog"></div>
+    <div class="board" id="board"></div>
+    <p class="note" id="modehelp"></p>
+  </section>
+
+  <section id="quiz" hidden></section>
+
+  <div class="legend" id="legend" aria-label="The eight AP themes"></div>
+</div>
+
+<script type="application/json" id="data">{"themes":[{"code":"NAT","name":"American and National Identity","q":"What did this say about who Americans are, or what the nation stands for?"},{"code":"WXT","name":"Work, Exchange, and Technology","q":"How did it involve money, trade, work, or technology?"},{"code":"GEO","name":"Geography and the Environment","q":"How did land, resources, or region shape it?"},{"code":"MIG","name":"Migration and Settlement","q":"Who moved or was moved, and why?"},{"code":"PCE","name":"Politics and Power","q":"Who gained or lost power? What did government do, and who argued about it?"},{"code":"WOR","name":"America in the World","q":"How were other nations or peoples involved?"},{"code":"ARC","name":"American and Regional Culture","q":"What beliefs, ideas, or creative expression shaped it or came out of it?"},{"code":"SOC","name":"Social Structures","q":"Which groups gained, lost, or were left out?"}],"terms":[{"id":"convention","name":"Constitutional Convention","when":"1787","blurb":"Fifty-five delegates met in Philadelphia to revise the Articles of Confederation and wrote a new Constitution instead.","lens":{"PCE":{"t":"Delegates set aside the Articles and designed a stronger central government with three branches, then settled the large-state and small-state fight with a two-house Congress.","r":false},"NAT":{"t":"“We the People” claimed that the government’s authority came from one American people, not from thirteen separate states.","r":false},"WXT":{"t":"Congress gained the economic powers the Confederation lacked: to tax and to regulate trade among the states and with other countries. States could no longer issue their own money.","r":false},"GEO":{"t":"Different land and climate had produced different economies: a South of plantation crops grown by enslaved labor and a North of trade and small farms. That is why the sections fought over counting enslaved people and taxing exports.","r":false},"MIG":{"t":"The Constitution protected the international slave trade, a forced migration, until 1808. It also gave Congress the power to admit new states as settlers moved west.","r":false},"WOR":{"t":"A government too weak to pay foreign debts or make Britain and Spain respect its borders was a main reason to meet. The new one could tax, raise an army, and make treaties binding on every state.","r":false},"ARC":{"t":"The framers drew on Enlightenment thinkers such as Montesquieu for the separation of powers, and on their own distrust of concentrated power learned in the Revolution.","r":false},"SOC":{"t":"The men in the room were wealthy and white. The document protected property and slavery, and it gave no voice to women, the poor, Native people, or the enslaved.","r":false}}},{"id":"hamilton_plan","name":"Hamilton’s financial plan","when":"1790 to 1791","blurb":"The treasury secretary’s program: pay the national debt in full, take over state debts, charter a national bank, and tax imports and whiskey.","lens":{"PCE":{"t":"Was a national bank constitutional? Hamilton said the necessary and proper clause allowed it, Jefferson said it did not, and the argument helped create the first two parties.","r":false},"NAT":{"t":"Hamilton argued that a nation that pays its debts earns respect. A shared national debt would also give Americans in every state a reason to want the union to last.","r":false},"WXT":{"t":"Pay the debt at full value, take over state debts, charter a bank, and fund it all with a tariff and a whiskey tax. Good credit let the government and its merchants borrow.","r":false},"GEO":{"t":"It favored the commercial Northeast, where most bondholders lived. Southern states that had already paid their debts objected, and the South was won over with a capital on the Potomac.","r":false},"MIG":{"t":"In his Report on Manufactures, Hamilton argued that building factories would draw skilled workers from Europe to the United States.","r":true},"WOR":{"t":"The plan depended on trade with Britain, because tariffs on British imports supplied most federal revenue. That gave Hamilton a strong reason to keep peace with Britain.","r":false},"ARC":{"t":"It carried a picture of what America should become: a country of cities, banks, and workshops like Britain, the opposite of Jefferson’s republic of farmers.","r":false},"SOC":{"t":"Speculators who had bought bonds cheaply from soldiers and farmers were paid in full, while the whiskey tax fell on backcountry farmers. The plan tied the wealthy to the government.","r":false}}},{"id":"whiskey","name":"Whiskey Rebellion","when":"1794","blurb":"Farmers in western Pennsylvania attacked tax collectors rather than pay a federal tax on whiskey, and Washington sent the militia.","lens":{"PCE":{"t":"Washington called up about 13,000 militia to enforce a federal tax. The government under the Constitution could do what the Confederation could not during Shays’ Rebellion.","r":false},"NAT":{"t":"Both sides claimed the Revolution. The rebels said they were resisting an unfair tax as in 1776. Washington said that in a republic you change a law by voting, not by force.","r":false},"WXT":{"t":"On the frontier, whiskey was the cheapest way to get grain to market and was often used in place of cash, so a tax on it hit small western farmers hardest.","r":false},"GEO":{"t":"The Appalachian Mountains made hauling grain east too costly, which is why farmers in western Pennsylvania distilled it. Distance also made the federal government feel far away.","r":false},"MIG":{"t":"The rebels were recent settlers of the backcountry, many of them Scots-Irish, who had moved beyond the mountains and felt ignored by the government in the East.","r":false},"WOR":{"t":"Washington worried that unhappy westerners might turn to Spain, which controlled the Mississippi River, or to Britain, which still held forts in the Northwest.","r":true},"ARC":{"t":"The rebels used the protest rituals of the Revolution: liberty poles, tarring and feathering tax collectors, and mass meetings.","r":false},"SOC":{"t":"It set small backcountry farmers against the eastern leaders who wrote the tax law. Large distillers could pay a lower flat rate, so the tax fell more heavily on small ones.","r":false}}},{"id":"french_rev","name":"The French Revolution’s impact on the United States","when":"1789 to 1800","blurb":"France overthrew its king and went to war with Britain, and Americans had to decide where they stood.","lens":{"PCE":{"t":"Whether to cheer or fear the Revolution split Washington’s cabinet and helped turn Hamilton’s and Jefferson’s followers into organized parties.","r":false},"NAT":{"t":"Americans argued about what their own Revolution had meant. Was France a sister republic carrying on 1776, or a warning about liberty without order?","r":false},"WXT":{"t":"With Britain and France at war, neutral American ships carried goods for both sides and merchants prospered, even as both navies seized American cargoes.","r":false},"GEO":{"t":"Sympathy followed region. Support for France ran strongest in the South and West, and support for Britain in the trading ports of New England.","r":true},"MIG":{"t":"Refugees arrived from France and from the slave revolt in French Saint-Domingue, and fear of French and Irish radicals fed the Alien Acts of 1798.","r":false},"WOR":{"t":"France expected help under the alliance of 1778. Washington chose neutrality, and the country spent the next two decades trying to stay out of the wars that followed.","r":false},"ARC":{"t":"Americans took up the styles of the Revolution: calling one another “citizen,” wearing tricolor cockades, and forming Democratic-Republican societies.","r":false},"SOC":{"t":"Artisans and farmers in the Democratic-Republican societies embraced its message of equality. Wealthier Federalists saw the same message as a threat of mob rule.","r":false}}},{"id":"jay_treaty","name":"Jay’s Treaty","when":"1794 to 1795","blurb":"An agreement with Britain that removed British forts from the Northwest but left most American complaints at sea unanswered.","lens":{"PCE":{"t":"The Senate approved it with exactly the two-thirds it needed, and the public fight over it hardened the split between Federalists and Democratic-Republicans.","r":false},"NAT":{"t":"Critics said it bowed to the old mother country and insulted American independence. Crowds burned John Jay in effigy in city after city.","r":false},"WXT":{"t":"It kept trade with Britain flowing, and tariffs on that trade were the federal government’s main source of income.","r":false},"GEO":{"t":"The British forts sat on the Great Lakes waterways and controlled the fur trade and the routes into the Ohio country. Getting Britain out of them decided who would hold that land.","r":false},"MIG":{"t":"With the British forts gone and the Native confederacy defeated at Fallen Timbers, settlers poured into the Ohio country.","r":false},"WOR":{"t":"It avoided a war with Britain that the United States could not afford. France took it as a betrayal and began seizing American ships.","r":false},"ARC":{"t":"It set off one of the first national protest movements: town meetings, petitions, newspaper attacks, and effigies of Jay.","r":true},"SOC":{"t":"Northern merchants gained from peace and trade. Southern planters were angry that it won no payment for enslaved people who had left with the British army during the Revolution.","r":false}}},{"id":"agrarian","name":"Jefferson’s agrarian republic","when":"Jefferson's presidency, 1801 to 1809","blurb":"The belief that a republic stays free only if most of its citizens are independent farmers who own their land.","lens":{"PCE":{"t":"Farmers who own land depend on no one, so they can vote freely. To Jefferson that meant a small federal government, low taxes, and power kept close to home.","r":false},"NAT":{"t":"Jefferson called those who work the land “the chosen people of God.” The independent farmer became a lasting picture of what an American is supposed to be.","r":false},"WXT":{"t":"America should farm and let Europe keep the factories: sell crops abroad and buy manufactured goods in return, with little need for banks or large cities.","r":false},"GEO":{"t":"The vision needed land, and a great deal of it. A growing nation of farmers would always need more territory to the west.","r":false},"MIG":{"t":"It promised each generation a farm of its own, which meant constant movement west and constant pressure on Native nations to give up their land.","r":false},"WOR":{"t":"A farm economy lives by exporting, so it needs open seas and open ports. That is why New Orleans and neutral trading rights mattered so much to Jefferson.","r":false},"ARC":{"t":"It rested on a moral idea, that farming builds virtue and cities breed corruption, which Jefferson laid out in his Notes on the State of Virginia.","r":false},"SOC":{"t":"The ideal farmer was a free white man. In Jefferson’s own Virginia, much of the land was worked by enslaved people, including at Monticello.","r":false}}},{"id":"louisiana","name":"Louisiana Purchase","when":"1803","blurb":"The United States bought the Louisiana Territory from France for $15 million.","lens":{"PCE":{"t":"The Constitution says nothing about buying territory. Jefferson, the strict constructionist, considered asking for an amendment and then relied on the treaty power, a loose reading.","r":false},"NAT":{"t":"It about doubled the country and fit Jefferson’s hope for an “empire of liberty” with room for farmers for generations to come.","r":false},"WXT":{"t":"For $15 million the United States secured the Mississippi River and the port of New Orleans, the route to market for every farmer west of the Appalachians.","r":false},"GEO":{"t":"About 828,000 square miles, from the Mississippi River to the Rocky Mountains, with borders so vague that no one knew exactly what had been bought. Lewis and Clark’s expedition became a survey of it.","r":false},"MIG":{"t":"It opened a vast region to American settlers. In time it also became the place where the government pushed Native nations from the East.","r":false},"WOR":{"t":"Napoleon sold because he had lost an army in Haiti and needed money to fight Britain. France was removed as a neighbor without a war.","r":false},"ARC":{"t":"New Orleans brought French and Spanish law, the Catholic Church, and a large community of free people of color into a mostly English-speaking, Protestant country.","r":false},"SOC":{"t":"Would slavery spread into the new land? The purchase made that question unavoidable, and it came due with Missouri in 1819. No one asked the Native nations who lived there.","r":false}}},{"id":"embargo","name":"Embargo Act","when":"1807 to 1809","blurb":"Congress banned all American exports in an attempt to make Britain and France respect neutral shipping.","lens":{"PCE":{"t":"Enforcing it took sweeping federal power, from the president who preached limited government. Anger over it revived the Federalist party in New England.","r":false},"NAT":{"t":"Jefferson meant to defend American rights and honor at sea without going to war. To many Americans it looked like the country punishing itself.","r":false},"WXT":{"t":"Exports fell by about four-fifths in one year. Ships sat idle at the docks, and money that had gone into shipping began to go into New England factories.","r":false},"GEO":{"t":"It hit hardest where the economy was the sea: New England and the port cities. Along the border with Canada, smuggling became a way of life.","r":false},"MIG":{"t":"It put tens of thousands of sailors out of work. Some left for Canada or signed onto foreign ships.","r":true},"WOR":{"t":"It was economic pressure used as a weapon: cut off American goods so Britain and France would respect neutral ships. Neither country changed its policy.","r":false},"ARC":{"t":"Opponents fought it with satire: songs, poems, and cartoons that spelled embargo backward as “O-Grab-Me” and drew it as a snapping turtle.","r":false},"SOC":{"t":"Wealthy merchants could wait it out. Sailors, dockworkers, and farmers with unsold crops had no such cushion.","r":false}}},{"id":"tecumseh","name":"Tecumseh’s confederacy","when":"about 1808 to 1813","blurb":"The Shawnee leader Tecumseh and his brother, the Prophet, united Native nations to stop the sale of land to the United States.","lens":{"PCE":{"t":"Tecumseh argued that the land belonged to all Native people in common, so no single nation could sign it away. Governor Harrison had been buying it from individual chiefs, treaty by treaty.","r":false},"NAT":{"t":"Tecumseh asked people to think of themselves as Indians first and as Shawnee, Miami, or Creek second: a new shared identity built to resist the United States.","r":false},"WXT":{"t":"The Prophet told his followers to give up alcohol and American trade goods, cutting the dependence on traders that led to debt and then to land sales.","r":false},"GEO":{"t":"The fight was over the Ohio Valley and the Great Lakes country, the fertile land between the Appalachians and the Mississippi River.","r":false},"MIG":{"t":"American settlers were pouring into Ohio and Indiana. Each treaty opened more land, more settlers came, and Native nations were pushed farther west.","r":false},"WOR":{"t":"Tecumseh allied with Britain, which supplied his warriors from Canada. To western Americans that made war with Britain look like a war for their own safety.","r":false},"ARC":{"t":"It began as a religious revival. Tenskwatawa, the Prophet, preached that the Master of Life wanted Native people to reject white customs and return to their own.","r":false},"SOC":{"t":"It challenged the older chiefs who signed treaties with the United States, and it tried to unite nations that had long been rivals.","r":false}}},{"id":"war_1812","name":"War of 1812","when":"1812 to 1815","blurb":"The United States fought Britain over impressment, trade, and British support for Native resistance.","lens":{"PCE":{"t":"The vote for war split by party and region. Federalists opposed the war throughout, and their Hartford Convention ruined them once the war ended well.","r":false},"NAT":{"t":"Americans called it a second war for independence. Surviving a war with Britain produced a surge of national pride and, eventually, a national anthem.","r":false},"WXT":{"t":"The British blockade cut off imports, so Americans made more of their own cloth and iron. With no national bank, the government struggled to pay for the war.","r":false},"GEO":{"t":"It was fought on the edges of the country: the Canadian border and the Great Lakes, the Chesapeake Bay, and the Gulf Coast at New Orleans.","r":false},"MIG":{"t":"With Tecumseh dead and the Creeks defeated, Native resistance east of the Mississippi was badly weakened, and settlers flooded into the Northwest and the Deep South.","r":false},"WOR":{"t":"Britain was fighting Napoleon and treated the American war as a sideshow. The peace treaty changed no borders and settled none of the causes.","r":false},"ARC":{"t":"Francis Scott Key’s poem about Fort McHenry became “The Star-Spangled Banner,” and Jackson’s victory at New Orleans was celebrated in songs and prints.","r":false},"SOC":{"t":"Native nations lost the most, because their British ally abandoned them at the peace table. Free Black soldiers fought at New Orleans, and thousands of enslaved people escaped to British ships.","r":false}}},{"id":"american_system","name":"American System","when":"from 1816","blurb":"Henry Clay’s program of a protective tariff, a national bank, and federally funded roads and canals.","lens":{"PCE":{"t":"Does the Constitution allow federal money for roads and canals? Clay said yes. Madison signed the bank and the tariff but vetoed the Bonus Bill for roads and canals as unconstitutional.","r":false},"NAT":{"t":"Clay wanted the sections to need one another, so that Americans would think of one national economy and not three regional ones.","r":false},"WXT":{"t":"A tariff to protect factories, a bank to supply credit and a stable currency, and roads and canals to move goods: the Northeast makes, the South and West grow, and each buys from the other.","r":false},"GEO":{"t":"It treated the country as three regions with different jobs: a manufacturing Northeast, a cotton South, and a food-growing West, tied together by transportation.","r":false},"MIG":{"t":"Better roads and canals carried settlers west and carried their crops back east, which made moving to the frontier pay.","r":false},"WOR":{"t":"The goal was economic independence from Britain. The war had shown the danger of relying on a rival for cloth, iron, and other manufactured goods.","r":false},"ARC":{"t":"It reflected the confident nationalism that followed the war: the belief that Americans could plan and build their own future.","r":true},"SOC":{"t":"Factory owners gained from the tariff. Southern planters, who sold cotton abroad and bought manufactured goods, came to see it as a tax on them for the North’s benefit.","r":false}}},{"id":"panic_1819","name":"Panic of 1819","when":"1819 to the early 1820s","blurb":"The country’s first major depression, set off when a boom in western land collapsed.","lens":{"PCE":{"t":"Voters blamed the Second Bank, and states passed laws to protect debtors. Distrust of banks and of distant power fed the politics that later elected Andrew Jackson.","r":false},"NAT":{"t":"It ended the easy confidence that followed the War of 1812 and showed that the Era of Good Feelings was not good for everyone.","r":false},"WXT":{"t":"Banks had lent freely for land speculation. When crop prices fell and the Second Bank demanded repayment in gold and silver, banks failed and farms were foreclosed.","r":false},"GEO":{"t":"The West and the South were hit hardest, because that is where the land boom and the debt were.","r":false},"MIG":{"t":"Cheap credit had pulled thousands west to buy land. When it collapsed, many lost their farms, and some moved on again, a few as far as Spanish Texas.","r":false},"WOR":{"t":"Europe’s farms recovered after the Napoleonic Wars, and Europe stopped buying so much American grain and cotton. Falling prices abroad helped set off the crash at home.","r":false},"ARC":{"t":"Hard times left a lasting suspicion of banks and paper money in the popular thinking of the West and South.","r":true},"SOC":{"t":"Debtors went to jail, city workers lost their jobs, and people began asking why bankers were protected when ordinary people were not.","r":false}}},{"id":"westward","name":"Westward expansion after 1815","when":"1815 to the 1820s","blurb":"After the War of 1812, Americans moved across the Appalachians in huge numbers.","lens":{"PCE":{"t":"New western states wrote constitutions that let nearly all white men vote, and each new state raised the question of slave or free in the Senate.","r":false},"NAT":{"t":"The frontier fed a picture of America as a land of opportunity, where an ordinary person could own a farm and start over.","r":false},"WXT":{"t":"Cheap federal land, high prices for cotton and grain, and easy bank credit made moving west look like a good investment.","r":false},"GEO":{"t":"Fertile soil in the Ohio Valley and on the Gulf plains pulled settlers. Worn-out soil in the East, especially on old tobacco land, pushed them.","r":false},"MIG":{"t":"Between 1810 and 1820 the population west of the Appalachians more than doubled, and five new western states joined the Union from 1816 through 1821.","r":false},"WOR":{"t":"Treaties cleared the way: the border with British Canada was set in 1818, and Spain gave up Florida in 1819.","r":false},"ARC":{"t":"Settlers carried the ways of their home regions with them, so the Northwest came to resemble the free states of the East and the Southwest came to resemble the plantation South.","r":false},"SOC":{"t":"It depended on forcing Native nations off their land. In the Southwest it carried slavery along, as enslaved people were marched from the Chesapeake to new cotton fields.","r":false}}},{"id":"missouri","name":"Missouri Compromise","when":"1820","blurb":"Congress admitted Missouri as a slave state and Maine as a free state and drew a line across the rest of the Louisiana Purchase.","lens":{"PCE":{"t":"Missouri came in as a slave state and Maine as a free state, keeping the Senate balanced at twelve each, and Congress banned slavery north of 36°30′ in the rest of the Louisiana Purchase.","r":false},"NAT":{"t":"It raised the question of whether the nation’s founding ideals could stand alongside the growth of slavery. Jefferson called the fight “a fire bell in the night.”","r":false},"WXT":{"t":"Two labor systems were competing for the West: farms and shops worked by free labor, and plantations growing cotton with enslaved labor.","r":false},"GEO":{"t":"Congress used a line of latitude to divide the West. Geography became the tool for managing slavery, and the map itself became sectional.","r":false},"MIG":{"t":"Slaveholders had already brought about 10,000 enslaved people into Missouri. The question was whether they could keep moving west with slavery.","r":false},"WOR":{"t":"The land in dispute had been French only seventeen years earlier. Buying Louisiana had solved a foreign problem and created a domestic one.","r":true},"ARC":{"t":"Northern congressmen and ministers argued openly that slavery was a moral wrong that should not spread. Southerners answered that the Constitution protected it.","r":false},"SOC":{"t":"The fight was over the future of slavery as a system. Missouri’s first constitution also tried to bar free Black people from entering the state, which took a second compromise to settle.","r":false}}},{"id":"monroe_doctrine","name":"Monroe Doctrine","when":"1823","blurb":"President Monroe declared the Americas closed to new European colonies and promised to stay out of Europe’s affairs.","lens":{"PCE":{"t":"The president announced it on his own in a message to Congress, with no law or treaty behind it. Foreign policy was becoming the executive’s to make.","r":false},"NAT":{"t":"It was a statement of confidence from a young country. John Quincy Adams insisted the United States speak for itself and not as Britain’s junior partner.","r":false},"WXT":{"t":"Spain’s former colonies were new markets. Keeping European empires out kept Latin American ports open to American, and British, merchants.","r":false},"GEO":{"t":"It treated the Western Hemisphere as a separate sphere, from Russian claims on the Pacific coast to Spanish America in the south.","r":false},"MIG":{"t":"“No new colonies” meant no new European settlements. That mattered most on the Pacific coast, where Russia was moving south from Alaska.","r":true},"WOR":{"t":"Europe stays out of the Americas, and the United States stays out of Europe’s wars. In 1823 it was the British navy, not American power, that made it stick.","r":false},"ARC":{"t":"It rested on the idea that the republics of the New World were a different political system from the monarchies of the Old World, and that the two should be kept apart.","r":false},"SOC":{"t":"It defended the independence of the new Latin American republics, yet the United States still refused to recognize Haiti, the republic founded by formerly enslaved people.","r":true}}},{"id":"cotton_gin","name":"Cotton gin","when":"1793","blurb":"Eli Whitney’s machine for separating cotton fiber from its seeds.","lens":{"PCE":{"t":"Cotton made slavery more profitable and gave slaveholding states every reason to seek new slave states in the West, the fight that surfaced over Missouri.","r":false},"NAT":{"t":"It deepened the difference between a South that saw its future in cotton and slavery and a North that was moving away from both.","r":true},"WXT":{"t":"One gin could clean as much cotton as dozens of workers cleaning by hand. Cotton became the country’s leading export and fed the textile mills of Britain and New England.","r":false},"GEO":{"t":"Short-staple cotton could now be grown at a profit across the Deep South, wherever the growing season was long enough, and the Cotton Belt spread west from Georgia.","r":false},"MIG":{"t":"Planters moved west into Alabama and Mississippi, and about a million enslaved people were eventually forced from the Upper South to the cotton states.","r":false},"WOR":{"t":"Most American cotton went to British mills, which tied the Southern economy to Britain’s Industrial Revolution.","r":false},"ARC":{"t":"As cotton made slavery more valuable, the Revolutionary-era talk of slavery slowly dying out faded, and Southern defenses of it hardened.","r":true},"SOC":{"t":"Many had expected slavery to decline after the Revolution. Cotton reversed that: the enslaved population grew from about 700,000 in 1790 to about 1.5 million in 1820.","r":false}}}]}</script>
+<script src="config.js"></script>
+<script src="progress.js"></script>
+<script>
+(function () {
+  'use strict';
+  var PR = window.Progress || null;
+  var D = JSON.parse(document.getElementById('data').textContent), TH = D.themes, TERMS = D.terms;
+  var S = { mode: 'explain', t: 0, st: {}, rot: 0, revealAll: false, timer: 90, left: 0, tick: null, quiz: null };
+  if (PR) {
+    var P0 = PR.get();
+    if (P0 && P0.el && P0.el.terms && typeof P0.el.terms === 'object') {
+      S.st = P0.el.terms;
+      Object.keys(S.st).forEach(function (id) { var t = S.st[id]; if (!t || typeof t !== 'object') { delete S.st[id]; return; } t.shown = t.shown || {}; t.rate = t.rate || {}; t.text = t.text || {}; });
+    }
+    PR.update(function (p) { p.el.total = TERMS.length; p.el.themes = TH.length; p.el.terms = S.st; });
+  }
+  function persist() { if (PR) PR.update(function (p) { p.el.terms = S.st; }); }
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function ls(k, v) { try { if (v === undefined) return localStorage.getItem('apush3.' + k); localStorage.setItem('apush3.' + k, v); } catch (e) { return null; } }
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function theme(code) { for (var i = 0; i < TH.length; i++) if (TH[i].code === code) return TH[i]; }
+  function sw(code) { return '<span class="sw" style="background:var(--t-' + code + ')"></span>'; }
+  function cur() { return TERMS[S.t]; }
+  function stOf(id) { return S.st[id] || (S.st[id] = { shown: {}, rate: {}, text: {} }); }
+
+  function renderTerm() {
+    var t = cur();
+    $('termcard').innerHTML = '<div class="when">' + esc(t.when) + '</div><div class="name">' + esc(t.name) + '</div><p class="blurb">' + esc(t.blurb) + '</p>';
+    $('pick').value = String(S.t);
+  }
+  function keepText() {
+    var st = stOf(cur().id);
+    Array.prototype.forEach.call(document.querySelectorAll('#board textarea'), function (ta) { st.text[ta.getAttribute('data-th')] = ta.value; });
+    persist();
+  }
+  function renderBoard() {
+    var t = cur(), st = stOf(t.id), h = '', cls = S.mode === 'class', n = 0, had = 0;
+    TH.forEach(function (th, i) {
+      var L = t.lens[th.code], shown = cls ? S.revealAll : !!st.shown[th.code], r = st.rate[th.code];
+      if (!cls && shown) n++; if (r === 'had') had++;
+      h += '<div class="tile" style="--tc:var(--t-' + th.code + ')"><div class="hd">' + sw(th.code) + '<span class="code">' + th.code + '</span>' + (cls ? '<span class="pod">Pod ' + (((i + S.rot) % 8) + 1) + '</span>' : '') + '</div>' +
+        '<div class="tn">' + esc(th.name) + '</div><p class="q">' + esc(th.q) + '</p>';
+      if (shown) {
+        h += '<p class="model">' + esc(L.t) + '</p>' + (L.r ? '<span class="reach">A stretch for this term, but a real connection.</span>' : '');
+        if (!cls) h += '<div class="rate" role="group" aria-label="How did you do?">' + [['had', 'I had it'], ['close', 'Close'], ['miss', 'Missed it']].map(function (o) {
+          return '<button data-rate="' + o[0] + '" data-th="' + th.code + '" aria-pressed="' + (r === o[0]) + '">' + o[1] + '</button>'; }).join('') + '</div>';
+      } else if (!cls) {
+        h += '<textarea id="ta-' + th.code + '" data-th="' + th.code + '" aria-label="Your explanation through ' + esc(th.name) + '" placeholder="Say it out loud, or write a sentence here."></textarea>' +
+          '<button class="btn show" data-show="' + th.code + '">Show a model answer</button>';
+      }
+      h += '</div>';
+    });
+    $('board').innerHTML = h;
+    Array.prototype.forEach.call(document.querySelectorAll('#board textarea'), function (ta) { ta.value = st.text[ta.getAttribute('data-th')] || ''; });
+    var pg = $('prog');
+    if (cls) {
+      pg.innerHTML = '<div class="seg" id="tsel">' + [60, 90, 120].map(function (s) { return '<button data-sec="' + s + '" aria-pressed="' + (S.timer === s) + '">' + (s === 60 ? '1:00' : s === 90 ? '1:30' : '2:00') + '</button>'; }).join('') + '</div>' +
+        '<span class="timer" id="clock" role="timer">' + fmt(S.tick ? S.left : S.timer) + '</span><button class="btn" id="tgo">' + (S.tick ? 'Stop' : 'Start timer') + '</button>' +
+        '<button class="btn primary" id="reveal">' + (S.revealAll ? 'Hide the answers' : 'Reveal all eight') + '</button><button class="btn" id="rot">Rotate pods</button>';
+      $('modehelp').textContent = 'Each pod writes one sentence explaining the term through its theme. Reveal the model answers when time is up, then rotate the pods and pick a new term.';
+    } else {
+      pg.innerHTML = '<span class="pips" aria-hidden="true">' + TH.map(function (th) { return '<i class="' + (st.shown[th.code] ? 'on' : '') + '"></i>'; }).join('') + '</span><span>' + n + ' of 8 lenses checked' + (n ? ' · ' + had + ' you had' : '') + '</span>' +
+        (n === 8 ? '<button class="btn primary" id="nextterm">Next term</button>' : '');
+      $('modehelp').textContent = 'Explain the term through each theme before you look. A model answer is one good answer, not the only one.';
+    }
+  }
+  function fmt(s) { return Math.floor(s / 60) + ':' + (s % 60 < 10 ? '0' : '') + (s % 60); }
+  function stopTimer() { if (S.tick) { clearInterval(S.tick); S.tick = null; } }
+
+  /* Name the lens */
+  function newQuiz() {
+    var pool = [];
+    TERMS.forEach(function (t, ti) { TH.forEach(function (th) { if (!t.lens[th.code].r) pool.push({ ti: ti, th: th.code }); }); });
+    S.quiz = { qs: shuffle(pool).slice(0, 10), i: 0, score: 0, pick: null, opts: null };
+    setOpts();
+  }
+  function setOpts() {
+    var q = S.quiz.qs[S.quiz.i]; if (!q) return;
+    var others = shuffle(TH.filter(function (t) { return t.code !== q.th; })).slice(0, 3).map(function (t) { return t.code; });
+    S.quiz.opts = TH.filter(function (t) { return t.code === q.th || others.indexOf(t.code) >= 0; }).map(function (t) { return t.code; });
+    S.quiz.pick = null;
+  }
+  function renderQuiz() {
+    var Q = S.quiz, el = $('quiz');
+    if (Q.i >= Q.qs.length) {
+      el.innerHTML = '<div class="quiz"><div class="eyebrow">Name the lens</div><p class="sent">' + Q.score + ' of ' + Q.qs.length + ' lenses named.</p><button class="btn primary" id="qagain">Play another round</button></div>';
+      return;
+    }
+    var q = Q.qs[Q.i], t = TERMS[q.ti], done = Q.pick !== null;
+    var h = '<div class="quiz"><div class="eyebrow">Question ' + (Q.i + 1) + ' of ' + Q.qs.length + ' · Score ' + Q.score + '</div>' +
+      '<div class="term" style="margin-top:10px;padding:12px 14px"><div class="when">' + esc(t.when) + '</div><div class="name" style="font-size:24px;margin:0">' + esc(t.name) + '</div></div>' +
+      '<p class="sent">' + esc(t.lens[q.th].t) + '</p><p class="muted" style="font-size:14px;margin:0 0 8px">Which theme is this sentence looking through?</p><div class="choices">';
+    Q.opts.forEach(function (code) {
+      var th = theme(code), c = done ? (code === q.th ? 'right' : (code === Q.pick ? 'wrong' : '')) : '';
+      h += '<button data-pick="' + code + '" class="' + c + '"' + (done ? ' disabled' : '') + '>' + sw(code) + '<span class="cn">' + esc(th.name) + '</span></button>';
+    });
+    h += '</div>';
+    if (done) {
+      var th2 = theme(q.th), ok = Q.pick === q.th;
+      h += '<div class="fb"><span class="v ' + (ok ? 'ok' : 'no') + '">' + (ok ? 'RIGHT' : 'NOT THIS TIME') + '</span><p style="margin:4px 0 10px">This one was written through <b>' + esc(th2.name) + '</b>. That lens asks: ' + esc(th2.q) + '</p>' +
+        '<button class="btn primary" id="qnext">' + (Q.i + 1 >= Q.qs.length ? 'See your score' : 'Next') + '</button></div>';
+    }
+    el.innerHTML = h + '</div><p class="note">Some sentences touch more than one theme. Pick the best fit.</p>';
+    var nb = $('qnext'); if (nb) { try { nb.focus({ preventScroll: true }); } catch (e) {} }
+  }
+
+  function setMode(m) {
+    keepText(); stopTimer(); S.mode = m; S.revealAll = false;
+    Array.prototype.forEach.call($('mode').querySelectorAll('button'), function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === m)); });
+    var q = m === 'quiz';
+    $('explain').hidden = q; $('quiz').hidden = !q; $('pickwrap').hidden = q; $('randwrap').hidden = q;
+    if (q) { if (!S.quiz || S.quiz.i >= S.quiz.qs.length) newQuiz(); renderQuiz(); } else { renderTerm(); renderBoard(); }
+    ls('el.mode', m);
+  }
+  function setTerm(i) { keepText(); stopTimer(); S.t = (i + TERMS.length) % TERMS.length; S.revealAll = false; renderTerm(); renderBoard(); ls('el.term', String(S.t)); }
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('button') : null; if (!b) return;
+    var st = stOf(cur().id);
+    if (b.parentNode && b.parentNode.id === 'mode') { setMode(b.dataset.v); return; }
+    if (b.dataset.show) { keepText(); st.shown[b.dataset.show] = true; persist(); if (PR) PR.event('el', 'lens_checked', { detail: { term: cur().id, theme: b.dataset.show } }); renderBoard(); return; }
+    if (b.dataset.rate) { keepText(); st.rate[b.dataset.th] = st.rate[b.dataset.th] === b.dataset.rate ? null : b.dataset.rate; persist(); if (PR && st.rate[b.dataset.th]) PR.event('el', 'lens_rated', { detail: { term: cur().id, theme: b.dataset.th, rate: st.rate[b.dataset.th] } }); renderBoard(); return; }
+    if (b.id === 'rand') { var n = S.t; while (TERMS.length > 1 && n === S.t) n = Math.floor(Math.random() * TERMS.length); setTerm(n); return; }
+    if (b.id === 'nextterm') { setTerm(S.t + 1); try { $('termcard').scrollIntoView({ block: 'start' }); } catch (e2) {} return; }
+    if (b.id === 'reveal') { S.revealAll = !S.revealAll; renderBoard(); return; }
+    if (b.id === 'rot') { S.rot = (S.rot + 1) % 8; renderBoard(); return; }
+    if (b.dataset.sec) { stopTimer(); S.timer = parseInt(b.dataset.sec, 10); renderBoard(); return; }
+    if (b.id === 'tgo') {
+      if (S.tick) { stopTimer(); renderBoard(); return; }
+      S.left = S.timer;
+      S.tick = setInterval(function () { S.left--; var c = $('clock'); if (c) c.textContent = fmt(Math.max(0, S.left)); if (S.left <= 0) { stopTimer(); renderBoard(); var c2 = $('clock'); if (c2) c2.textContent = 'Time'; } }, 1000);
+      renderBoard(); return;
+    }
+    if (b.dataset.pick && S.quiz && S.quiz.pick === null) { S.quiz.pick = b.dataset.pick; if (b.dataset.pick === S.quiz.qs[S.quiz.i].th) S.quiz.score++; renderQuiz(); return; }
+    if (b.id === 'qnext') {
+      S.quiz.i++;
+      if (S.quiz.i >= S.quiz.qs.length && PR) {
+        var qs = S.quiz.score, qt = S.quiz.qs.length;
+        PR.update(function (p) { p.el.quiz.push({ score: qs, total: qt, at: new Date().toISOString() }); if (p.el.quiz.length > 50) p.el.quiz.splice(0, p.el.quiz.length - 50); });
+        PR.event('el', 'quiz_complete', { score: qs, total: qt });
+      }
+      setOpts(); renderQuiz(); return;
+    }
+    if (b.id === 'qagain') { newQuiz(); renderQuiz(); return; }
+  });
+  $('pick').addEventListener('change', function () { setTerm(parseInt(this.value, 10) || 0); });
+  var saveT = null;
+  $('board').addEventListener('input', function (e) {
+    var ta = e.target; if (!ta || ta.tagName !== 'TEXTAREA') return;
+    stOf(cur().id).text[ta.getAttribute('data-th')] = ta.value;
+    clearTimeout(saveT); saveT = setTimeout(persist, 400);
+  });
+
+  $('pick').innerHTML = TERMS.map(function (t, i) { return '<option value="' + i + '">' + esc(t.name) + '</option>'; }).join('');
+  $('legend').innerHTML = TH.map(function (t) { return '<span>' + sw(t.code) + '<b class="mono" style="font-weight:500;color:var(--fg)">' + t.code + '</b> ' + esc(t.name) + '</span>'; }).join('');
+  var t0 = parseInt(ls('el.term') || '', 10); if (t0 >= 0 && t0 < TERMS.length) S.t = t0;
+  var m0 = ls('el.mode'); renderTerm(); renderBoard();
+  if (m0 === 'quiz' || m0 === 'class') setMode(m0);
+})();
+</script>
+
+</body>
+</html>

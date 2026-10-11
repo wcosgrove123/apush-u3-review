@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>APUSH Unit III Review</title>
+<meta name="description" content="Three review games for APUSH Unit III, 1786 to 1824: the New Republic Timeline Game, Chain Reaction, and Eight Lenses. Progress saves on your device.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F3F4F1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#15171A" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: header, a name row, three game cards in a row (stacked on a phone), the progress report, a short study order, footer. Same tokens as the games. */
+:root {
+  --bg: #F3F4F1; --fg: #17191C; --muted: #5A5E66; --rule: #D5D8D2; --panel: #FFFFFF; --panel2: #E9EBE6;
+  --ink: #1F5FBF; --ink-bg: #E3ECFA; --on-ink: #FFFFFF;
+  --good: #1D7443; --good-bg: #E2F1E8; --bad: #A1311F; --bad-bg: #F7E5E1; --warn: #8A5A00; --warn-bg: #FAEFD6;
+  --display: "Newsreader", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15171A; --fg: #ECEAE4; --muted: #A6A8AD; --rule: #343840; --panel: #1D2025; --panel2: #262A31;
+  --ink: #7FA9EE; --ink-bg: #1D2A40; --on-ink: #10151D;
+  --good: #6FCF97; --good-bg: #17301F; --bad: #E8806E; --bad-bg: #3A1F1A; --warn: #E0B44A; --warn-bg: #3A3015; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #15171A; --fg: #ECEAE4; --muted: #A6A8AD; --rule: #343840; --panel: #1D2025; --panel2: #262A31;
+  --ink: #7FA9EE; --ink-bg: #1D2A40; --on-ink: #10151D;
+  --good: #6FCF97; --good-bg: #17301F; --bad: #E8806E; --bad-bg: #3A1F1A; --warn: #E0B44A; --warn-bg: #3A3015; color-scheme: dark }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.5; margin: 0; }
+button, input { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+h1 { font-family: var(--display); font-weight: 600; font-size: clamp(30px, 5.5vw, 44px); line-height: 1.05; margin: 0 0 8px; text-wrap: balance; letter-spacing: -.01em; }
+h2 { font-family: var(--display); font-weight: 600; font-size: 24px; line-height: 1.15; margin: 0 0 6px; text-wrap: balance; }
+p { margin: 0 0 10px; }
+.eyebrow { font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.muted { color: var(--muted); }
+.mono { font-family: var(--mono); }
+.btn { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 16px; cursor: pointer; font-weight: 500; text-decoration: none; display: inline-block; color: inherit; line-height: 1.4; }
+.btn:hover { background: var(--panel2); }
+.btn.primary { background: var(--ink); border-color: var(--ink); color: var(--on-ink); }
+.btn.primary:hover { background: var(--ink); filter: brightness(1.08); }
+
+.wrap { max-width: 940px; margin: 0 auto; padding-block: 24px 72px; padding-inline: 18px; }
+.lede { font-size: 17px; max-width: 64ch; margin-bottom: 0; }
+
+.who { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding: 14px 16px; background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; }
+.who label { font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.who input { flex: 1 1 240px; min-width: 0; padding: 8px 10px; border: 1px solid var(--rule); border-radius: 6px; background: var(--bg); font-size: 16px; }
+.who .hint { flex-basis: 100%; font-size: 13.5px; color: var(--muted); margin: 0; }
+
+.games { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 18px; }
+.card { background: var(--panel); border: 1px solid var(--rule); border-radius: 12px; padding: 18px 18px 16px; display: flex; flex-direction: column; gap: 9px; min-width: 0; }
+.card .skill { font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: var(--ink); }
+.card h2 { margin: 0; font-size: 25px; }
+.card .what { font-size: 15px; color: var(--muted); margin: 0; flex: 1; }
+.card .stat { font-family: var(--mono); font-size: 12.5px; line-height: 1.5; min-height: 38px; }
+.bar { height: 6px; background: var(--panel2); border-radius: 3px; overflow: hidden; }
+.bar i { display: block; height: 100%; width: 0; background: var(--ink); transition: width .3s ease; }
+.card .play { align-self: flex-start; margin-top: 2px; }
+
+.report { margin-top: 22px; padding: 18px 20px; background: var(--panel); border: 1px solid var(--rule); border-radius: 12px; }
+.report pre { white-space: pre-wrap; overflow-wrap: anywhere; font-family: var(--mono); font-size: 13px; line-height: 1.55; background: var(--bg); border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; margin: 10px 0 12px; }
+.acts { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.acts .say { font-size: 14px; color: var(--good); }
+
+.tips { margin-top: 24px; }
+.tips ol { margin: 6px 0 0; padding-left: 22px; max-width: 70ch; }
+.tips li { margin-bottom: 6px; }
+
+footer { margin-top: 30px; padding-top: 14px; border-top: 1px solid var(--rule); font-size: 13.5px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 18px; justify-content: space-between; }
+.linklike { background: none; border: 0; padding: 0; color: var(--muted); text-decoration: underline; cursor: pointer; font-size: inherit; }
+.linklike:hover { color: var(--bad); }
+@media (max-width: 820px) { .games { grid-template-columns: minmax(0, 1fr); } .card .stat { min-height: 0; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">APUSH · Unit III · 1786 to 1824</div>
+    <h1>Unit III Review Games</h1>
+    <p class="lede">Three ways to study the New Republic. Play on any device. Your progress saves in this browser, and this page builds a report you can send to your teacher.</p>
+  </header>
+
+  <section class="who" aria-label="Your name">
+    <label for="name">Your name</label>
+    <input id="name" maxlength="60" autocomplete="off" spellcheck="false" placeholder="First name and last initial">
+    <p class="hint" id="hint">Goes at the top of your progress report. Saved on this device only.</p>
+  </section>
+
+  <section class="games" aria-label="The three games">
+    <article class="card">
+      <div class="skill">Chronology</div>
+      <h2>New Republic Timeline Game</h2>
+      <p class="what">One event at a time, no date shown. Decide where it belongs among the events already on the line.</p>
+      <div class="stat" id="tl-stat"></div>
+      <div class="bar" aria-hidden="true"><i id="tl-bar"></i></div>
+      <a class="btn primary play" href="timeline.html">Play</a>
+    </article>
+    <article class="card">
+      <div class="skill">Causation</div>
+      <h2>Chain Reaction</h2>
+      <p class="what">Every event in a chain helped cause the next one. Start from the first link and build the rest in order.</p>
+      <div class="stat" id="cr-stat"></div>
+      <div class="bar" aria-hidden="true"><i id="cr-bar"></i></div>
+      <a class="btn primary play" href="chain-reaction.html">Play</a>
+    </article>
+    <article class="card">
+      <div class="skill">Themes</div>
+      <h2>Eight Lenses</h2>
+      <p class="what">One term, eight ways to explain it. Each AP theme asks a different question about the same event.</p>
+      <div class="stat" id="el-stat"></div>
+      <div class="bar" aria-hidden="true"><i id="el-bar"></i></div>
+      <a class="btn primary play" href="eight-lenses.html">Play</a>
+    </article>
+  </section>
+
+  <section class="report" aria-label="Your progress report">
+    <h2>Your progress report</h2>
+    <p class="muted" style="margin:0">Copy this and send it to your teacher the way they asked. A screenshot of this page works too.</p>
+    <pre id="report" tabindex="0"></pre>
+    <div class="acts"><button class="btn primary" id="copy">Copy the report</button><span class="say" id="copied" role="status"></span></div>
+  </section>
+
+  <section class="tips">
+    <h2>A good order</h2>
+    <ol>
+      <li><b>Timeline Game first</b>, to get the order of events straight. Play the whole unit with 8 cards, then try 12, then turn on "Months too."</li>
+      <li><b>Chain Reaction next.</b> After each chain, answer the question at the top out loud in one sentence that uses the word <i>because</i>.</li>
+      <li><b>Eight Lenses last.</b> Say or write your own sentence before you look at the model answer, then rate yourself honestly. Finish with a round of Name the lens.</li>
+      <li><b>Come back tomorrow</b> and redo anything you missed. Two short sessions beat one long one.</li>
+    </ol>
+  </section>
+
+  <footer>
+    <span>Progress is saved in this browser on this device, so use the same device and browser to keep it. <span id="last"></span></span>
+    <button class="linklike" id="reset">Erase my progress</button>
+  </footer>
+</div>
+
+<script src="config.js"></script>
+<script src="progress.js"></script>
+<script>
+(function () {
+  'use strict';
+  var PR = window.Progress; if (!PR) return;
+  function $(id) { return document.getElementById(id); }
+  function pl(n, one, many) { return n + ' ' + (n === 1 ? one : (many || one + 's')); }
+  function pct(a, b) { return b ? Math.max(0, Math.min(100, Math.round(100 * a / b))) : 0; }
+
+  function render() {
+    var s = PR.summary(), tl = s.tl, cr = s.cr, el = s.el;
+    if (document.activeElement !== $('name')) $('name').value = s.name;
+    $('tl-stat').textContent = tl.solo
+      ? pl(tl.solo, 'game') + ' played. Best ' + tl.best.score + ' of ' + tl.best.total + ' (' + tl.bestLabel + '). ' + tl.mastered + ' of ' + tl.total + ' events placed right at least once.'
+      : 'Not played yet. ' + tl.total + ' events to place.';
+    $('tl-bar').style.width = pct(tl.mastered, tl.total) + '%';
+    $('cr-stat').textContent = cr.built
+      ? cr.built + ' of ' + cr.total + ' chains built. ' + cr.clean + ' of ' + cr.links + ' links right on the first try.'
+      : 'Not started yet. ' + cr.total + ' chains to build.';
+    $('cr-bar').style.width = pct(cr.built, cr.total) + '%';
+    $('el-stat').textContent = (el.checked || el.rounds)
+      ? el.full + ' of ' + el.terms + ' terms fully checked, ' + el.checked + ' of ' + el.lenses + ' lenses.' + (el.rounds ? ' Name the lens: best ' + el.best.score + ' of ' + el.best.total + '.' : '')
+      : 'Not started yet. ' + el.terms + ' terms, 8 lenses each.';
+    $('el-bar').style.width = pct(el.checked, el.lenses) + '%';
+    $('report').textContent = PR.report();
+    var any = tl.games || el.checked || el.rounds || cr.built;
+    $('last').textContent = any && s.updated ? 'Last played ' + PR.when(s.updated) + '.' : '';
+  }
+
+  if (PR.config && PR.config.syncUrl) $('hint').textContent = 'Your teacher set this site up to receive your progress as you play, so use the name your teacher asked for.';
+
+  $('name').addEventListener('input', function () { PR.name(this.value); $('report').textContent = PR.report(); });
+
+  $('copy').addEventListener('click', function () {
+    var text = PR.report();
+    function done() { $('copied').textContent = 'Copied. Paste it wherever your teacher asked.'; setTimeout(function () { $('copied').textContent = ''; }, 5000); }
+    function fallback() {
+      try {
+        var r = document.createRange(); r.selectNodeContents($('report'));
+        var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+        if (document.execCommand('copy')) done(); else throw new Error('copy failed');
+      } catch (e) { $('copied').textContent = 'Select the report above and copy it.'; }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fallback); else fallback();
+  });
+
+  $('reset').addEventListener('click', function () {
+    if (confirm('Erase all your progress on this device? This cannot be undone.')) { PR.reset(); render(); }
+  });
+
+  /* Pick up anything saved by a game in another tab, or since this page was last shown. */
+  function refresh() { PR.reload(); render(); }
+  window.addEventListener('storage', refresh);
+  window.addEventListener('focus', refresh);
+  window.addEventListener('pageshow', refresh);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) refresh(); });
+  render();
+})();
+</script>
+</body>
+</html>
